@@ -16,11 +16,6 @@ import RealmSwift
      @objc dynamic var name = ""
      @objc dynamic var icon: Data?
      @objc dynamic var date: Date = Date()
-     @objc dynamic var height: Double = 0
-     @objc dynamic var weight: Double = 0
-     @objc dynamic var temperature: Double = 0
-     @objc dynamic var memo: String?
-     @objc dynamic var dateImage: Data?
  }
 class ChildProfile2: Object {
     override static func primaryKey() -> String? {
@@ -30,11 +25,6 @@ class ChildProfile2: Object {
     @objc dynamic var name = ""
     @objc dynamic var icon: Data?
     @objc dynamic var date: Date = Date()
-    @objc dynamic var height: Double = 0
-    @objc dynamic var weight: Double = 0
-    @objc dynamic var temperature: Double = 0
-    @objc dynamic var memo: String?
-    @objc dynamic var dateImage: Data?
 }
 class ChildProfile3: Object {
     override static func primaryKey() -> String? {
@@ -44,11 +34,6 @@ class ChildProfile3: Object {
     @objc dynamic var name = ""
     @objc dynamic var icon: Data?
     @objc dynamic var date: Date = Date()
-    @objc dynamic var height: Double = 0
-    @objc dynamic var weight: Double = 0
-    @objc dynamic var temperature: Double = 0
-    @objc dynamic var memo: String?
-    @objc dynamic var dateImage: Data?
 }
 class ChildProfile4: Object {
     override static func primaryKey() -> String? {
@@ -58,11 +43,6 @@ class ChildProfile4: Object {
     @objc dynamic var name = ""
     @objc dynamic var icon: Data?
     @objc dynamic var date: Date = Date()
-    @objc dynamic var height: Double = 0
-    @objc dynamic var weight: Double = 0
-    @objc dynamic var temperature: Double = 0
-    @objc dynamic var memo: String?
-    @objc dynamic var dateImage: Data?
 }
 class ChildProfile5: Object {
     override static func primaryKey() -> String? {
@@ -72,9 +52,4 @@ class ChildProfile5: Object {
     @objc dynamic var name = ""
     @objc dynamic var icon: Data?
     @objc dynamic var date: Date = Date()
-    @objc dynamic var height: Double = 0
-    @objc dynamic var weight: Double = 0
-    @objc dynamic var temperature: Double = 0
-    @objc dynamic var memo: String?
-    @objc dynamic var dateImage: Data?
 }

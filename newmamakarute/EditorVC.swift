@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
- import RealmSwift
+import RealmSwift
 
 protocol EditorViewContorollerDelegate {
     func recordUpdate()
@@ -47,8 +47,17 @@ protocol EditorViewContorollerDelegate {
 
 
 
-
+     
+     
+     
      var record = DailyCondition()
+     var record2 = DailyCondition2()
+     var record3 = DailyCondition3()
+     var record4 = DailyCondition4()
+     var record5 = DailyCondition5()
+     
+     
+     
      var delegate: EditorViewContorollerDelegate?
 
      var datePicker: UIDatePicker {
@@ -86,7 +95,7 @@ protocol EditorViewContorollerDelegate {
          inputImage.image = sampleImage
 
          let realm = try! Realm()
-         let firstRecord = realm.objects(DailyCondition.self).first
+         let firstRecord = realm.objects(ChildProfile.self).first
          print("👀firstRecord: \(String(describing: firstRecord))")
 
          print("👀record: \(record)")
@@ -232,40 +241,176 @@ protocol EditorViewContorollerDelegate {
 
      func saveRecord() {
          let realm = try! Realm()
+         let id = realm.objects(ChildProfile.self).value(forKey: "id")
+         let id2 = realm.objects(ChildProfile2.self).value(forKey: "id")
+         let id3 = realm.objects(ChildProfile3.self).value(forKey: "id")
+         let id4 = realm.objects(ChildProfile4.self).value(forKey: "id")
+         let id5 = realm.objects(ChildProfile5.self).value(forKey: "id")
+         
+         if id as! String == "0" {
+             try! realm.write {
+                 if let dateText = inputDateTextField.text,
+                    let date = dateFormatter.date(from: dateText) {
+                     record.date = date
+                 }
+                 if let heightText = inputHeightTextField.text,
+                    let height = Double(heightText) {
+                     record.height = height
+                 }
+                 if let weightText = inputWeightTextField.text,
+                    let weight = Double(weightText) {
+                     record.weight = weight
+                 }
+                 if let temperatureText = inputTemperatureTextField.text,
+                    let temperature = Double(temperatureText) {
+                     record.temperature = temperature
+                 }
+                 if let memoText = inputMemoTextView.text,
+                    let memo = String?(memoText) {
+                     record.memo = memo
+                 }
+                 if let inputImageData = inputImage.image?.pngData(),
+                    let dateImage = Data?(inputImageData) {
+                     record.dateImage = dateImage
+                 }
+
+                 realm.add(record)
+             }
+             delegate?.recordUpdate()
+             dismiss(animated: true)
+
+         } else if id2 as! String == "1" {
          try! realm.write {
              if let dateText = inputDateTextField.text,
                 let date = dateFormatter.date(from: dateText) {
-                 record.date = date
+                 record2.date = date
              }
              if let heightText = inputHeightTextField.text,
                 let height = Double(heightText) {
-                 record.height = height
+                 record2.height = height
              }
              if let weightText = inputWeightTextField.text,
                 let weight = Double(weightText) {
-                 record.weight = weight
+                 record2.weight = weight
              }
              if let temperatureText = inputTemperatureTextField.text,
                 let temperature = Double(temperatureText) {
-                 record.temperature = temperature
+                 record2.temperature = temperature
              }
              if let memoText = inputMemoTextView.text,
                 let memo = String?(memoText) {
-                 record.memo = memo
+                 record2.memo = memo
              }
              if let inputImageData = inputImage.image?.pngData(),
                 let dateImage = Data?(inputImageData) {
-                 record.dateImage = dateImage
+                 record2.dateImage = dateImage
              }
 
-             realm.add(record)
+             realm.add(record2)
          }
          delegate?.recordUpdate()
          dismiss(animated: true)
 
-         }
-     }
+         } else if id3 as! String == "2" {
+             try! realm.write {
+                 if let dateText = inputDateTextField.text,
+                    let date = dateFormatter.date(from: dateText) {
+                     record3.date = date
+                 }
+                 if let heightText = inputHeightTextField.text,
+                    let height = Double(heightText) {
+                     record3.height = height
+                 }
+                 if let weightText = inputWeightTextField.text,
+                    let weight = Double(weightText) {
+                     record3.weight = weight
+                 }
+                 if let temperatureText = inputTemperatureTextField.text,
+                    let temperature = Double(temperatureText) {
+                     record3.temperature = temperature
+                 }
+                 if let memoText = inputMemoTextView.text,
+                    let memo = String?(memoText) {
+                     record3.memo = memo
+                 }
+                 if let inputImageData = inputImage.image?.pngData(),
+                    let dateImage = Data?(inputImageData) {
+                     record3.dateImage = dateImage
+                 }
 
+                 realm.add(record3)
+             }
+             delegate?.recordUpdate()
+             dismiss(animated: true)
+
+         } else if id4 as! String == "3" {
+             try! realm.write {
+                 if let dateText = inputDateTextField.text,
+                    let date = dateFormatter.date(from: dateText) {
+                     record4.date = date
+                 }
+                 if let heightText = inputHeightTextField.text,
+                    let height = Double(heightText) {
+                     record4.height = height
+                 }
+                 if let weightText = inputWeightTextField.text,
+                    let weight = Double(weightText) {
+                     record4.weight = weight
+                 }
+                 if let temperatureText = inputTemperatureTextField.text,
+                    let temperature = Double(temperatureText) {
+                     record4.temperature = temperature
+                 }
+                 if let memoText = inputMemoTextView.text,
+                    let memo = String?(memoText) {
+                     record4.memo = memo
+                 }
+                 if let inputImageData = inputImage.image?.pngData(),
+                    let dateImage = Data?(inputImageData) {
+                     record4.dateImage = dateImage
+                 }
+
+                 realm.add(record4)
+             }
+             delegate?.recordUpdate()
+             dismiss(animated: true)
+
+         } else if  id5 as! String == "4" {
+             try! realm.write {
+                 if let dateText = inputDateTextField.text,
+                    let date = dateFormatter.date(from: dateText) {
+                     record5.date = date
+                 }
+                 if let heightText = inputHeightTextField.text,
+                    let height = Double(heightText) {
+                     record5.height = height
+                 }
+                 if let weightText = inputWeightTextField.text,
+                    let weight = Double(weightText) {
+                     record5.weight = weight
+                 }
+                 if let temperatureText = inputTemperatureTextField.text,
+                    let temperature = Double(temperatureText) {
+                     record5.temperature = temperature
+                 }
+                 if let memoText = inputMemoTextView.text,
+                    let memo = String?(memoText) {
+                     record5.memo = memo
+                 }
+                 if let inputImageData = inputImage.image?.pngData(),
+                    let dateImage = Data?(inputImageData) {
+                     record5.dateImage = dateImage
+                 }
+
+                 realm.add(record5)
+             }
+             delegate?.recordUpdate()
+             dismiss(animated: true)
+
+             }
+         
+     }
+ }
  extension Notification {
 
      // キーボードの高さ

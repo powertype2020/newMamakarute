@@ -17,17 +17,14 @@ class CalendarVC: UIViewController {
 
          var recordList: [DailyCondition] = []
          var childList: [ChildProfile] = []
-         var childList2: [ChildProfile2] = []
-         var childList3: [ChildProfile3] = []
-         var childList4: [ChildProfile4] = []
-         var childList5: [ChildProfile5] = []
-    
+         let array = [ChildProfile(),ChildProfile2(),ChildProfile3(),ChildProfile4(),ChildProfile5()]
+                    
          @IBOutlet weak var calendarView: FSCalendar!
 
     @IBOutlet weak var addButton: UIButton!
 
     @IBAction func addButton(_ sender: UIButton) {
-            transitionToEditorView()
+        transitionToEditorView()
          }
     
      
@@ -51,14 +48,12 @@ class CalendarVC: UIViewController {
 
 
              let realm = try! Realm()
-             let result = realm.objects(ChildProfile.self).value(forKey: "id")
-             let result2 = realm.objects(DailyCondition.self).value(forKey: "id")
+             let result = realm.objects(ChildProfile.self).value(forKey: "name")
              
 
              childNameLabel.text = String(describing: result)
 
              print("\(String(describing: result))")
-             print("\(String(describing: result2))")
 
              self.title = "カレンダー画面"
                      self.view.backgroundColor = .white
@@ -81,6 +76,21 @@ class CalendarVC: UIViewController {
              getRecord()
              calendarView.reloadData()
          }
+    
+    func transitionToSignUpView() {
+    let storyboard = UIStoryboard(name: "SignUpVC", bundle: nil)
+    guard let signUpViewController = storyboard.instantiateInitialViewController() as? SignUpVC else { return }
+    present(signUpViewController, animated: true)
+    }
+    
+    func transitionToEditorView(with record: DailyCondition? = nil) {
+        let storyboard = UIStoryboard(name: "EditorVC", bundle: nil)
+        guard let editorViewcontroller = storyboard.instantiateInitialViewController() as? EditorVC else { return }
+        if let record = record {
+            editorViewcontroller.record = record
+        }
+        present(editorViewcontroller, animated: true)
+    }
 
          func configureCalendar() {
              // ヘッダーの日付フォーマット変更
@@ -104,21 +114,8 @@ class CalendarVC: UIViewController {
 
          }
 
-         func transitionToEditorView(with record: DailyCondition? = nil) {
-             let storyboard = UIStoryboard(name: "EditorVC", bundle: nil)
-             guard let editorViewcontroller = storyboard.instantiateInitialViewController() as? EditorVC else { return }
-             if let record = record {
-                 editorViewcontroller.record = record
-             }
-             editorViewcontroller.delegate
-             present(editorViewcontroller, animated: true)
-         }
-
-         func transitionToSignUpView() {
-         let storyboard = UIStoryboard(name: "SignUpVC", bundle: nil)
-         guard let signUpViewController = storyboard.instantiateInitialViewController() as? SignUpVC else { return }
-         present(signUpViewController, animated: true)
-         }
+         
+         
 
     @objc func editBarButtonTapped(_ sender: UIBarButtonItem) {
         transitionToSignUpView()
@@ -135,7 +132,6 @@ class CalendarVC: UIViewController {
              recordList = Array(realm.objects(DailyCondition.self))
              childList = Array(realm.objects(ChildProfile.self))
          }
-
      }
 
      extension CalendarVC: FSCalendarDataSource {

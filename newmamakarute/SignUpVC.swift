@@ -27,7 +27,10 @@ import UIKit
 
 
      var record = ChildProfile()
-
+     var record2 = ChildProfile2()
+     var record3 = ChildProfile3()
+     var record4 = ChildProfile4()
+     var record5 = ChildProfile5()
      override func viewDidLoad() {
          super.viewDidLoad()
 
@@ -70,6 +73,12 @@ import UIKit
 
      func saveRecord() {
          let realm = try! Realm()
+         let name = realm.objects(ChildProfile.self).value(forKey: "name")
+         let name2 = realm.objects(ChildProfile2.self).value(forKey: "name")
+         let name3 = realm.objects(ChildProfile3.self).value(forKey: "name")
+         let name4 = realm.objects(ChildProfile4.self).value(forKey: "name")
+         let name5 = realm.objects(ChildProfile5.self).value(forKey: "name")
+         if name != nil {
          try! realm.write {
              if let nameText = inputChildNameTextField.text,
                 let childName = String?(nameText) {
@@ -85,7 +94,72 @@ import UIKit
 
          dismiss(animated: true)
 
-         }
+         } else if name2 != nil {
+             try! realm.write {
+                 if let nameText = inputChildNameTextField.text,
+                    let childName = String?(nameText) {
+                     record2.name = childName
+                 }
+                 if let inputIconData = inputIconImageView.image?.pngData(),
+                    let dateImage = Data?(inputIconData) {
+                     record2.icon = dateImage
+                 }
+
+                 realm.add(record2)
+             }
+
+             dismiss(animated: true)
+             
+         } else if name3 != nil {
+             try! realm.write {
+                 if let nameText = inputChildNameTextField.text,
+                    let childName = String?(nameText) {
+                     record3.name = childName
+                 }
+                 if let inputIconData = inputIconImageView.image?.pngData(),
+                    let dateImage = Data?(inputIconData) {
+                     record3.icon = dateImage
+                 }
+
+                 realm.add(record3)
+             }
+
+             dismiss(animated: true)
+
+         } else if name4 != nil {
+             try! realm.write {
+                 if let nameText = inputChildNameTextField.text,
+                    let childName = String?(nameText) {
+                     record4.name = childName
+                 }
+                 if let inputIconData = inputIconImageView.image?.pngData(),
+                    let dateImage = Data?(inputIconData) {
+                     record4.icon = dateImage
+                 }
+
+                 realm.add(record4)
+             }
+
+             dismiss(animated: true)
+
+         } else if name5 != nil {
+             try! realm.write {
+                 if let nameText = inputChildNameTextField.text,
+                    let childName = String?(nameText) {
+                     record5.name = childName
+                 }
+                 if let inputIconData = inputIconImageView.image?.pngData(),
+                    let dateImage = Data?(inputIconData) {
+                     record5.icon = dateImage
+                 }
+
+                 realm.add(record5)
+             }
+
+             dismiss(animated: true)
+
+             }
+     }
 
      @objc func didTapDone() {
          view.endEditing(true)
