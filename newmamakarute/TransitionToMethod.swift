@@ -15,7 +15,7 @@ class TransitionTM: UIViewController {
     present(signUpViewController, animated: true)
     }
     
-    func transitionToEditorView(with record: ChildProfile? = nil) {
+    func transitionToEditorView(with record: DailyCondition? = nil) {
         let storyboard = UIStoryboard(name: "EditorVC", bundle: nil)
         guard let editorViewcontroller = storyboard.instantiateInitialViewController() as? EditorVC else { return }
         if let record = record {

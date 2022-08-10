@@ -8,18 +8,25 @@
 import Foundation
 import UIKit
 import RealmSwift
+import AuthenticationServices
+
 
 class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    public weak var CalendarVC: CalendarVC!
     
     @IBOutlet weak var childNameTableView: UITableView!
     
-     
      @IBOutlet weak var menuView: UIView!
      
+    
+    var getNumber: Int = 0
 
      override func viewDidLoad() {
          super.viewDidLoad()
+         
+         childNameTableView.dataSource = self
+         childNameTableView.delegate = self
      }
 
      override func viewWillAppear(_ animated: Bool) {
@@ -53,13 +60,47 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
      override func didReceiveMemoryWarning() {
          super.didReceiveMemoryWarning()
      }
+    
+    func changeChildName() {
+        
+        
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        let realm = try! Realm()
+        let childs = realm.objects(ChildProfile.self).value(forKey: "name")
+        let childsName = childs as Any
+        return (childsName as AnyObject).count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let realm = try! Realm()
+        let childList = realm.objects(ChildProfile.self)
+        let childs = childList.self.value(forKey: "name")
+        let childsName = childs as! Array<Any>
+        cell.textLabel!.text = childsName[indexPath.row] as? String
+        return cell
     }
     
- }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let calendarVC = newmamakarute.CalendarVC()
+        getNumber = indexPath.row
+        let realm = try! Realm()
+        let resultName = realm.objects(ChildProfile.self).value(forKey: "name")
+        let childsName: [String] = resultName as! [String]
+        let childName = childsName[getNumber]
+        calendarVC.changeName = childName
+        dismiss(animated: true, completion: nil)
+    }
+    }
+extension ChildMenuVC {
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        guard let presentationController = presentationController else {
+            return
+        }
+        presentationController.delegate?.presentationControllerDidDismiss?(presentationController)
+    }
+}

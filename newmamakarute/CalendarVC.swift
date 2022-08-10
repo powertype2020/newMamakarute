@@ -17,7 +17,10 @@ class CalendarVC: UIViewController {
 
          var recordList: [DailyCondition] = []
          var childList: [ChildProfile] = []
-         let array = [ChildProfile(),ChildProfile2(),ChildProfile3(),ChildProfile4(),ChildProfile5()]
+         var changeName = ""
+         var getChildName = ""
+    
+    var child: ChildProfile?
                     
          @IBOutlet weak var calendarView: FSCalendar!
 
@@ -26,6 +29,7 @@ class CalendarVC: UIViewController {
     @IBAction func addButton(_ sender: UIButton) {
         transitionToEditorView()
          }
+    
     
      
     @IBOutlet weak var childNameLabel: UILabel!
@@ -43,18 +47,9 @@ class CalendarVC: UIViewController {
              navigationController?.navigationBar.tintColor = .white
              navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
-
              configureCalendar()
-
-
-             let realm = try! Realm()
-             let result = realm.objects(ChildProfile.self).value(forKey: "name")
              
-
-             childNameLabel.text = String(describing: result)
-
-             print("\(String(describing: result))")
-
+             
              self.title = "カレンダー画面"
                      self.view.backgroundColor = .white
 
@@ -67,7 +62,7 @@ class CalendarVC: UIViewController {
              calendarView.dataSource = self
              calendarView.delegate = self
              
-
+             print(Realm.Configuration.defaultConfiguration.fileURL!)
              
          }
 
@@ -76,6 +71,15 @@ class CalendarVC: UIViewController {
              getRecord()
              calendarView.reloadData()
          }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
     
     func transitionToSignUpView() {
     let storyboard = UIStoryboard(name: "SignUpVC", bundle: nil)
@@ -113,7 +117,19 @@ class CalendarVC: UIViewController {
              calendarView.calendarWeekdayView.weekdayLabels[6].textColor = .blue
 
          }
+    
+    
 
+    func dataReload() {
+       let realm = try? Realm()
+        guard let name = childNameLabel.text,
+              let child: ChildProfile = realm?.objects(ChildProfile.self).filter("name == %@", name).first else { return }
+        let dailyCondition: [DailyCondition] = Array(child.dailyCondition)
+        recordList = dailyCondition
+        calendarView.reloadData()
+    }
+    
+    
          
          
 
@@ -123,7 +139,9 @@ class CalendarVC: UIViewController {
          }
 
          @objc func addBarButtonTapped(_ sender: UIBarButtonItem) {
-             self.performSegue(withIdentifier: "showMenu", sender: nil)
+             let nextView = storyboard?.instantiateViewController(identifier: "ChildMenuVC") as! ChildMenuVC
+                 nextView.presentationController?.delegate = self //←追加する
+                 present(nextView, animated: true, completion: nil)
              
          }
 
@@ -155,4 +173,15 @@ extension CalendarVC: EditorViewContorollerDelegate {
         getRecord()
         calendarView.reloadData()
     }
+}
+
+extension CalendarVC: UIAdaptivePresentationControllerDelegate {
+  func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+    
+      print("実行されました")
+      childNameLabel.text = changeName
+      print(type(of: changeName))
+      print("\(String(describing: childNameLabel))")
+      dataReload()
+  }
 }
