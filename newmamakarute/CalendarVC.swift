@@ -16,12 +16,13 @@ class CalendarVC: UIViewController {
          var addBarButtonItem: UIBarButtonItem!
 
          var recordList: [DailyCondition] = []
-         var childList: [ChildProfile] = []
+         
          var changeName = ""
          var getChildName = ""
-    
+         
     var child: ChildProfile?
-                    
+
+    
          @IBOutlet weak var calendarView: FSCalendar!
 
     @IBOutlet weak var addButton: UIButton!
@@ -47,7 +48,10 @@ class CalendarVC: UIViewController {
              navigationController?.navigationBar.tintColor = .white
              navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
+             getRecord()
+             dataReload()
              configureCalendar()
+             
              
              
              self.title = "カレンダー画面"
@@ -59,8 +63,7 @@ class CalendarVC: UIViewController {
 
              self.navigationItem.rightBarButtonItems = [editBarButtonItem]
              self.navigationItem.leftBarButtonItems = [addBarButtonItem]
-             calendarView.dataSource = self
-             calendarView.delegate = self
+             
              
              print(Realm.Configuration.defaultConfiguration.fileURL!)
              
@@ -68,18 +71,31 @@ class CalendarVC: UIViewController {
 
          override func viewWillAppear(_ animated: Bool) {
              super.viewWillAppear(animated)
-             getRecord()
              calendarView.reloadData()
          }
     
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        presentingViewController?.endAppearanceTransition()
+        recordUpdate()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
+    
+    func getRecord() {
+        let realm = try? Realm()
+        let result = realm? .objects(ChildProfile.self).first
+        let resultName = result!.name
+        childNameLabel.text = resultName
+        recordList = Array(result!.dailyCondition)
+    }
+    
+    
+    
     
     func transitionToSignUpView() {
     let storyboard = UIStoryboard(name: "SignUpVC", bundle: nil)
@@ -120,14 +136,7 @@ class CalendarVC: UIViewController {
     
     
 
-    func dataReload() {
-       let realm = try? Realm()
-        guard let name = childNameLabel.text,
-              let child: ChildProfile = realm?.objects(ChildProfile.self).filter("name == %@", name).first else { return }
-        let dailyCondition: [DailyCondition] = Array(child.dailyCondition)
-        recordList = dailyCondition
-        calendarView.reloadData()
-    }
+    
     
     
          
@@ -145,11 +154,8 @@ class CalendarVC: UIViewController {
              
          }
 
-         func getRecord() {
-             let realm = try! Realm()
-             recordList = Array(realm.objects(DailyCondition.self))
-             childList = Array(realm.objects(ChildProfile.self))
-         }
+    
+    
      }
 
      extension CalendarVC: FSCalendarDataSource {
@@ -170,18 +176,32 @@ class CalendarVC: UIViewController {
 
 extension CalendarVC: EditorViewContorollerDelegate {
     func recordUpdate() {
-        getRecord()
+        dataReload()
         calendarView.reloadData()
     }
 }
 
 extension CalendarVC: UIAdaptivePresentationControllerDelegate {
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-    
-      print("実行されました")
-      childNameLabel.text = changeName
-      print(type(of: changeName))
-      print("\(String(describing: childNameLabel))")
+      print(child)
       dataReload()
   }
+}
+
+private extension CalendarVC {
+    func configure() {
+        calendarView.dataSource = self
+        calendarView.delegate = self
+    }
+    
+    func dataReload() {
+       let realm = try? Realm()
+        guard let id = child?.id,
+              let result = realm?.objects(ChildProfile.self).filter("id == %@", id).first else { return }
+        let resultName = result.name
+        let resultCondition = result.dailyCondition
+        childNameLabel.text = resultName
+        recordList = Array(resultCondition)
+        calendarView.reloadData()
+    }
 }

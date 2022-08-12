@@ -45,7 +45,7 @@ protocol EditorViewContorollerDelegate {
          saveRecord()
      }
 
-     var childProfile = ChildProfile()
+     var childProfile: ChildProfile?
      var record = DailyCondition()
      
      
@@ -258,7 +258,7 @@ protocol EditorViewContorollerDelegate {
                      record.dateImage = dateImage
                  }
 
-             childProfile.dailyCondition.append(record)
+             childProfile?.dailyCondition.append(record)
              }
              delegate?.recordUpdate()
              dismiss(animated: true)

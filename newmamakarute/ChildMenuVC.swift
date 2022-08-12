@@ -11,7 +11,7 @@ import RealmSwift
 import AuthenticationServices
 
 
-class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAdaptivePresentationControllerDelegate {
     
     public weak var CalendarVC: CalendarVC!
     
@@ -20,11 +20,13 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
      @IBOutlet weak var menuView: UIView!
      
     
+    private var childList: [ChildProfile] = []
+    
     var getNumber: Int = 0
 
      override func viewDidLoad() {
          super.viewDidLoad()
-         
+         dataReload()
          childNameTableView.dataSource = self
          childNameTableView.delegate = self
      }
@@ -65,42 +67,48 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate 
         
         
     }
+    
+    func dataReload() {
+       let realm = try? Realm()
+        guard let result = realm?.objects(ChildProfile.self) else { return }
+        childList = Array(result)
+    }
+    
+    func transitionToCalendarVC(with child: ChildProfile) {
+        let calendarVC = newmamakarute.CalendarVC()
+        calendarVC.child = child
+        dismiss(animated: true, completion: nil)
+    }
+    
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let realm = try! Realm()
-        let childs = realm.objects(ChildProfile.self).value(forKey: "name")
-        let childsName = childs as Any
-        return (childsName as AnyObject).count
+        return childList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let realm = try! Realm()
-        let childList = realm.objects(ChildProfile.self)
-        let childs = childList.self.value(forKey: "name")
-        let childsName = childs as! Array<Any>
-        cell.textLabel!.text = childsName[indexPath.row] as? String
+        let cell = UITableViewCell()
+        let childs = childList[indexPath.row]
+        cell.textLabel?.text = childs.name
         return cell
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let calendarVC = newmamakarute.CalendarVC()
-        getNumber = indexPath.row
-        let realm = try! Realm()
-        let resultName = realm.objects(ChildProfile.self).value(forKey: "name")
-        let childsName: [String] = resultName as! [String]
-        let childName = childsName[getNumber]
-        calendarVC.changeName = childName
-        dismiss(animated: true, completion: nil)
+        let calendarVC = storyboard?.instantiateViewController(identifier: "CalendarVC") as! CalendarVC
+        calendarVC.presentationController?.delegate = self
+        let child = childList[indexPath.row]
+        print(child)
+        transitionToCalendarVC(with: child)
+        childNameTableView.deselectRow(at: indexPath, animated: true)
     }
     }
+
 extension ChildMenuVC {
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag, completion: completion)
-        guard let presentationController = presentationController else {
-            return
-        }
-        presentationController.delegate?.presentationControllerDidDismiss?(presentationController)
-    }
-}
+     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+         super.dismiss(animated: flag, completion: completion)
+         guard let presentationController = presentationController else {
+             return
+         }
+         presentationController.delegate?.presentationControllerDidDismiss?(presentationController)
+     }
+ }
