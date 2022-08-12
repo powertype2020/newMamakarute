@@ -44,8 +44,8 @@ protocol EditorViewContorollerDelegate {
      @IBAction func saveButton(_ sender: UIButton) {
          saveRecord()
      }
-
-     var childProfile: ChildProfile?
+     
+     var childCondition: ChildProfile?
      var record = DailyCondition()
      
      
@@ -82,12 +82,9 @@ protocol EditorViewContorollerDelegate {
          inputImage.isUserInteractionEnabled = true
          inputImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:))))
 
+         print(childCondition)
          let sampleImage = UIImage(named: "noimage")
          inputImage.image = sampleImage
-
-         let realm = try! Realm()
-         let firstRecord = realm.objects(ChildProfile.self).first
-         print("👀firstRecord: \(String(describing: firstRecord))")
 
          print("👀record: \(record)")
      }
@@ -258,13 +255,20 @@ protocol EditorViewContorollerDelegate {
                      record.dateImage = dateImage
                  }
 
-             childProfile?.dailyCondition.append(record)
+             childCondition?.dailyCondition.append(record)
              }
              delegate?.recordUpdate()
              dismiss(animated: true)
 
          }
  }
+
+extension EditorVC: CalendarVCDelegate {
+    func childDCHandOver(with childCondition: ChildProfile) {
+        self.childCondition = childCondition
+    }
+}
+
  extension Notification {
 
      // キーボードの高さ

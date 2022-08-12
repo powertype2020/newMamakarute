@@ -11,6 +11,10 @@ import RealmSwift
 import AuthenticationServices
 
 
+protocol ChildMenuVCDelegate {
+     func willClose(with child: ChildProfile)
+ }
+
 class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAdaptivePresentationControllerDelegate {
     
     public weak var CalendarVC: CalendarVC!
@@ -23,6 +27,8 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     private var childList: [ChildProfile] = []
     
     var getNumber: Int = 0
+    
+    var delegate: ChildMenuVCDelegate?
 
      override func viewDidLoad() {
          super.viewDidLoad()
@@ -63,11 +69,6 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
          super.didReceiveMemoryWarning()
      }
     
-    func changeChildName() {
-        
-        
-    }
-    
     func dataReload() {
        let realm = try? Realm()
         guard let result = realm?.objects(ChildProfile.self) else { return }
@@ -75,8 +76,7 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     }
     
     func transitionToCalendarVC(with child: ChildProfile) {
-        let calendarVC = newmamakarute.CalendarVC()
-        calendarVC.child = child
+        delegate?.willClose(with: child)
         dismiss(animated: true, completion: nil)
     }
     

@@ -10,25 +10,32 @@ import UIKit
 import FSCalendar
 import RealmSwift
 
+protocol CalendarVCDelegate {
+    func childDCHandOver(with childCondition: ChildProfile)
+}
+
 class CalendarVC: UIViewController {
 
          var editBarButtonItem: UIBarButtonItem!
          var addBarButtonItem: UIBarButtonItem!
-
          var recordList: [DailyCondition] = []
-         
          var changeName = ""
          var getChildName = ""
-         
-    var child: ChildProfile?
-
+         var child: ChildProfile?
+    
+         var delegate: CalendarVCDelegate?
     
          @IBOutlet weak var calendarView: FSCalendar!
 
     @IBOutlet weak var addButton: UIButton!
 
     @IBAction func addButton(_ sender: UIButton) {
-        transitionToEditorView()
+        let editorVC = EditorVC()
+        editorVC.delegate = self
+        guard let childCondition = child else { return }
+        print(childCondition)
+        transitionToEditorViewChild(with: childCondition)
+        transitionToEditorViewDaily()
          }
     
     
@@ -48,11 +55,9 @@ class CalendarVC: UIViewController {
              navigationController?.navigationBar.tintColor = .white
              navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
+             print("👀viewDidLoad()")
              getRecord()
-             dataReload()
              configureCalendar()
-             
-             
              
              self.title = "カレンダー画面"
                      self.view.backgroundColor = .white
@@ -90,6 +95,7 @@ class CalendarVC: UIViewController {
         let realm = try? Realm()
         let result = realm? .objects(ChildProfile.self).first
         let resultName = result!.name
+        child = result
         childNameLabel.text = resultName
         recordList = Array(result!.dailyCondition)
     }
@@ -103,13 +109,17 @@ class CalendarVC: UIViewController {
     present(signUpViewController, animated: true)
     }
     
-    func transitionToEditorView(with record: DailyCondition? = nil) {
+    func transitionToEditorViewDaily(with record: DailyCondition? = nil) {
         let storyboard = UIStoryboard(name: "EditorVC", bundle: nil)
         guard let editorViewcontroller = storyboard.instantiateInitialViewController() as? EditorVC else { return }
         if let record = record {
             editorViewcontroller.record = record
         }
         present(editorViewcontroller, animated: true)
+    }
+    
+    func transitionToEditorViewChild(with childCondition: ChildProfile) {
+        delegate?.childDCHandOver(with: childCondition)
     }
 
          func configureCalendar() {
@@ -133,14 +143,6 @@ class CalendarVC: UIViewController {
              calendarView.calendarWeekdayView.weekdayLabels[6].textColor = .blue
 
          }
-    
-    
-
-    
-    
-    
-         
-         
 
     @objc func editBarButtonTapped(_ sender: UIBarButtonItem) {
         transitionToSignUpView()
@@ -149,14 +151,19 @@ class CalendarVC: UIViewController {
 
          @objc func addBarButtonTapped(_ sender: UIBarButtonItem) {
              let nextView = storyboard?.instantiateViewController(identifier: "ChildMenuVC") as! ChildMenuVC
-                 nextView.presentationController?.delegate = self //←追加する
+                 nextView.delegate = self
+                 nextView.presentationController?.delegate = self
                  present(nextView, animated: true, completion: nil)
              
          }
-
-    
-    
+}
+    extension CalendarVC: ChildMenuVCDelegate {
+         func willClose(with child: ChildProfile) {
+             self.child = child
+         }
      }
+    
+    
 
      extension CalendarVC: FSCalendarDataSource {
          func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
@@ -170,7 +177,7 @@ class CalendarVC: UIViewController {
          func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
              calendar.deselect(date)
              guard let record = recordList.first(where: { $0.date.zeroclock == date.zeroclock }) else { return }
-             transitionToEditorView(with: record)
+             transitionToEditorViewDaily(with: record)
          }
      }
 
