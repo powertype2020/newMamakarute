@@ -11,6 +11,9 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
          var window: UIWindow?
+    
+         var childcondition: ChildProfile?
+    
          var tabBarController: UITabBarController?
 
          func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -43,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      viewControllers.append(calendarNavigationController)
 
                      let graphViewController: GraphVC? = GraphVC()
-             graphViewController?.tabBarItem = UITabBarItem(tabBarSystemItem: UITabBarItem.SystemItem.downloads, tag: 2)
+                     graphViewController?.tabBarItem = UITabBarItem(tabBarSystemItem: UITabBarItem.SystemItem.downloads, tag: 2)
                      let graphNavigationController = UINavigationController(rootViewController: graphViewController!)
                      viewControllers.append(graphNavigationController)
 

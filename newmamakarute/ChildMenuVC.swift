@@ -17,6 +17,7 @@ protocol ChildMenuVCDelegate {
 
 class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAdaptivePresentationControllerDelegate {
     
+    
     public weak var CalendarVC: CalendarVC!
     
     @IBOutlet weak var childNameTableView: UITableView!
@@ -101,7 +102,46 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
         transitionToCalendarVC(with: child)
         childNameTableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { (action, view, completionHandler) in
+          print("Editがタップされた")
+          completionHandler(true)
+        }
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+          let alert = UIAlertController(title: "データを消しますか？", message: "今までの記録が消えてしまいます", preferredStyle: .alert)
+          let delete = UIAlertAction(title: "削除", style: .default, handler: { (action) -> Void in
+                    print("Delete button tapped")
+          let alert = UIAlertController(title: "本当に消しますか？", message: "データを戻すことはできません", preferredStyle: .alert)
+          let delete = UIAlertAction(title: "削除", style: .default, handler: { (action) -> Void in
+                        print("Delete button tapped final")
+                    })
+                    
+          let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
+                        print("Cancel button tapped")
+                  self.dismiss(animated: true, completion: nil)
+                    })
+              alert.addAction(delete)
+              alert.addAction(cancel)
+              self.present(alert, animated: true, completion: nil)                })
+                
+          let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
+                    print("Cancel button tapped")
+              self.dismiss(animated: true, completion: nil)
+                })
+            
+            alert.addAction(delete)
+            alert.addAction(cancel)
+            self.present(alert, animated: true, completion: nil)
+            
+          print("Deleteがタップされた")
+            
+          completionHandler(true)
+        }
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+      }
     }
+    
 
 extension ChildMenuVC {
      override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {

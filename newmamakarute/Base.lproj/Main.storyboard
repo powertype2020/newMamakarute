@@ -12,7 +12,7 @@
         <!--Item 2-->
         <scene sceneID="vFO-6V-AMP">
             <objects>
-                <viewController id="9YZ-EV-E9S" customClass="GraphVC" customModule="newmamakarute" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GraphVC" id="9YZ-EV-E9S" customClass="GraphVC" customModule="newmamakarute" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hL4-l1-0bd">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -49,6 +49,18 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Tj3-F4-WJK">
+                                <rect key="frame" x="142" y="76" width="131" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="身長"/>
+                                    <segment title="体重"/>
+                                    <segment title="体温"/>
+                                </segments>
+                                <connections>
+                                    <action selector="selectGraph:" destination="9YZ-EV-E9S" eventType="valueChanged" id="sQg-To-DGE"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Tjo-hd-JF3"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -70,10 +82,11 @@
                             <constraint firstItem="Tjo-hd-JF3" firstAttribute="bottom" secondItem="Etw-69-CK4" secondAttribute="bottom" constant="100" id="wf5-N5-9e8"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="8Ee-4d-5Rc"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="Item 2" image="alt" catalog="system" id="8Ee-4d-5Rc"/>
                     <connections>
                         <outlet property="endTextField" destination="njI-vF-8b3" id="7js-nm-zKE"/>
                         <outlet property="graphView" destination="Etw-69-CK4" id="AkK-KM-yRQ"/>
+                        <outlet property="selectGraph" destination="Tj3-F4-WJK" id="4ZT-1u-X99"/>
                         <outlet property="startTextField" destination="pEi-xU-VPh" id="95F-Js-4IG"/>
                     </connections>
                 </viewController>
@@ -108,6 +121,7 @@
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="148-iC-xei">
                                 <rect key="frame" x="55" y="99" width="100" height="100"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="Cek-Yg-esf"/>
                                     <constraint firstAttribute="height" constant="100" id="lui-sS-sgx"/>
@@ -231,7 +245,7 @@
         <scene sceneID="LmU-yO-0QQ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="D1C-Pp-Bsq" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item 1" id="Ucd-7F-PPP"/>
+                    <tabBarItem key="tabBarItem" title="Item 1" image="calendar" catalog="system" id="Ucd-7F-PPP"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cSk-6e-jsI">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -259,6 +273,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="alt" catalog="system" width="128" height="106"/>
+        <image name="calendar" catalog="system" width="128" height="106"/>
         <image name="pencil.tip.crop.circle.badge.plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

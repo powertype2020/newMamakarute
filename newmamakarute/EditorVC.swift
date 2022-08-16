@@ -82,7 +82,7 @@ protocol EditorViewContorollerDelegate {
          inputImage.isUserInteractionEnabled = true
          inputImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:))))
 
-         print(childCondition)
+         
          let sampleImage = UIImage(named: "noimage")
          inputImage.image = sampleImage
 
@@ -255,19 +255,13 @@ protocol EditorViewContorollerDelegate {
                      record.dateImage = dateImage
                  }
 
-             childCondition?.dailyCondition.append(record)
+             mainChildData?.dailyCondition.append(record)
              }
              delegate?.recordUpdate()
              dismiss(animated: true)
 
          }
  }
-
-extension EditorVC: CalendarVCDelegate {
-    func childDCHandOver(with childCondition: ChildProfile) {
-        self.childCondition = childCondition
-    }
-}
 
  extension Notification {
 

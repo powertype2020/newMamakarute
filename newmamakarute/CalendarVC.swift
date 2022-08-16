@@ -10,32 +10,26 @@ import UIKit
 import FSCalendar
 import RealmSwift
 
-protocol CalendarVCDelegate {
-    func childDCHandOver(with childCondition: ChildProfile)
-}
+var mainChildData: ChildProfile?
 
-class CalendarVC: UIViewController {
-
+class CalendarVC: UIViewController, UITabBarDelegate {
+    
+    
+         var delegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
          var editBarButtonItem: UIBarButtonItem!
          var addBarButtonItem: UIBarButtonItem!
          var recordList: [DailyCondition] = []
          var changeName = ""
          var getChildName = ""
          var child: ChildProfile?
-    
-         var delegate: CalendarVCDelegate?
+         var unwrapChild = ChildProfile.self
     
          @IBOutlet weak var calendarView: FSCalendar!
 
     @IBOutlet weak var addButton: UIButton!
 
     @IBAction func addButton(_ sender: UIButton) {
-        let editorVC = EditorVC()
-        editorVC.delegate = self
-        guard let childCondition = child else { return }
-        print(childCondition)
-        transitionToEditorViewChild(with: childCondition)
-        transitionToEditorViewDaily()
+        transitionToEditorView()
          }
     
     
@@ -55,20 +49,26 @@ class CalendarVC: UIViewController {
              navigationController?.navigationBar.tintColor = .white
              navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
-             print("👀viewDidLoad()")
+             
              getRecord()
              configureCalendar()
+             configure()
              
              self.title = "カレンダー画面"
-                     self.view.backgroundColor = .white
+             self.view.backgroundColor = .white
+             
+             let screenW:CGFloat = view.frame.size.width
+                     let screenH:CGFloat = view.frame.size.height
+                     childIconImageView.image = UIImage(named: "noImage")
+                     childIconImageView.frame = CGRect(x:0, y:0, width:128, height:128)
+                     childIconImageView.center = CGPoint(x:screenW/2, y:screenH/2)
+                     self.view.addSubview(childIconImageView)
 
-
-             editBarButtonItem = UIBarButtonItem(title: "編集", style: .done, target: self, action: #selector(editBarButtonTapped(_:)))
-             addBarButtonItem = UIBarButtonItem(title: "追加", style: .done, target: self, action: #selector(addBarButtonTapped(_:)))
+             editBarButtonItem = UIBarButtonItem(title: "追加", style: .done, target: self, action: #selector(editBarButtonTapped(_:)))
+             addBarButtonItem = UIBarButtonItem(image: UIImage(named: "childMenu")!, style: .done, target: self, action: #selector(addBarButtonTapped(_:)))
 
              self.navigationItem.rightBarButtonItems = [editBarButtonItem]
              self.navigationItem.leftBarButtonItems = [addBarButtonItem]
-             
              
              print(Realm.Configuration.defaultConfiguration.fileURL!)
              
@@ -76,7 +76,8 @@ class CalendarVC: UIViewController {
 
          override func viewWillAppear(_ animated: Bool) {
              super.viewWillAppear(animated)
-             calendarView.reloadData()
+             print("👀\(mainChildData)")
+             recordUpdate()
          }
     
     
@@ -89,17 +90,25 @@ class CalendarVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
     }
+    
+    override func didReceiveMemoryWarning() {
+            super.didReceiveMemoryWarning()
+        }
+    
+    func didSelectTab(tabBarController: MainTabBarVC) {
+            print("first!")
+        }
     
     func getRecord() {
         let realm = try? Realm()
         let result = realm? .objects(ChildProfile.self).first
         let resultName = result!.name
-        child = result
+        mainChildData = result
         childNameLabel.text = resultName
         recordList = Array(result!.dailyCondition)
     }
-    
     
     
     
@@ -109,7 +118,7 @@ class CalendarVC: UIViewController {
     present(signUpViewController, animated: true)
     }
     
-    func transitionToEditorViewDaily(with record: DailyCondition? = nil) {
+    func transitionToEditorView(with record: DailyCondition? = nil) {
         let storyboard = UIStoryboard(name: "EditorVC", bundle: nil)
         guard let editorViewcontroller = storyboard.instantiateInitialViewController() as? EditorVC else { return }
         if let record = record {
@@ -118,9 +127,7 @@ class CalendarVC: UIViewController {
         present(editorViewcontroller, animated: true)
     }
     
-    func transitionToEditorViewChild(with childCondition: ChildProfile) {
-        delegate?.childDCHandOver(with: childCondition)
-    }
+    
 
          func configureCalendar() {
              // ヘッダーの日付フォーマット変更
@@ -159,7 +166,7 @@ class CalendarVC: UIViewController {
 }
     extension CalendarVC: ChildMenuVCDelegate {
          func willClose(with child: ChildProfile) {
-             self.child = child
+             mainChildData = child
          }
      }
     
@@ -167,7 +174,7 @@ class CalendarVC: UIViewController {
 
      extension CalendarVC: FSCalendarDataSource {
          func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-             let dateList = recordList.map({ $0.date })
+             let dateList = recordList.map({ $0.date.zeroclock })
              let isEqualDate = dateList.contains(date.zeroclock)
              return isEqualDate ? 1 : 0
          }
@@ -177,7 +184,7 @@ class CalendarVC: UIViewController {
          func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
              calendar.deselect(date)
              guard let record = recordList.first(where: { $0.date.zeroclock == date.zeroclock }) else { return }
-             transitionToEditorViewDaily(with: record)
+             transitionToEditorView(with: record)
          }
      }
 
@@ -190,7 +197,6 @@ extension CalendarVC: EditorViewContorollerDelegate {
 
 extension CalendarVC: UIAdaptivePresentationControllerDelegate {
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-      print(child)
       dataReload()
   }
 }
@@ -203,7 +209,7 @@ private extension CalendarVC {
     
     func dataReload() {
        let realm = try? Realm()
-        guard let id = child?.id,
+        guard let id = mainChildData?.id,
               let result = realm?.objects(ChildProfile.self).filter("id == %@", id).first else { return }
         let resultName = result.name
         let resultCondition = result.dailyCondition

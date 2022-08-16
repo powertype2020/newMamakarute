@@ -12,6 +12,7 @@ import Charts
 
 class GraphVC: UIViewController {
     
+    
     @IBOutlet weak var graphView: LineChartView!
     
     
@@ -20,8 +21,53 @@ class GraphVC: UIViewController {
     
     @IBOutlet weak var endTextField: UITextField!
     
+    @IBOutlet weak var selectGraph: UISegmentedControl!
+    
+    @IBAction func selectGraph(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            var entry = [ChartDataEntry]()
+            recordList.enumerated().forEach({ index, record in
+                let data = ChartDataEntry(x: Double(index), y: record.height)
+                entry.append(data)
+            })
+            let dataSet = LineChartDataSet(entries: entry, label: "身長")
+            graphView.data = LineChartData(dataSet: dataSet)
+            graphView.data?.notifyDataChanged()
+            graphView.notifyDataSetChanged()
+        case 1:
+            var entry = [ChartDataEntry]()
+            recordList.enumerated().forEach({ index, record in
+                let data = ChartDataEntry(x: Double(index), y: record.weight)
+                entry.append(data)
+            })
+            let dataSet = LineChartDataSet(entries: entry, label: "体重")
+            graphView.data = LineChartData(dataSet: dataSet)
+            graphView.data?.notifyDataChanged()
+            graphView.notifyDataSetChanged()
+        case 2:
+            var entry = [ChartDataEntry]()
+            recordList.enumerated().forEach({ index, record in
+                let data = ChartDataEntry(x: Double(index), y: record.temperature)
+                entry.append(data)
+            })
+            let dataSet = LineChartDataSet(entries: entry, label: "体温")
+            graphView.data = LineChartData(dataSet: dataSet)
+            graphView.data?.notifyDataChanged()
+            graphView.notifyDataSetChanged()
+            
+        default:
+            print("失敗しました")
+        }
+        
+    }
+    
+    var child: ChildProfile?
+    var childData: ChildProfile?
     
     var recordList: [DailyCondition] = []
+    
+    let delegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
     
     var datePicker: UIDatePicker {
         let datePicker: UIDatePicker = UIDatePicker()
@@ -40,29 +86,41 @@ class GraphVC: UIViewController {
         return dateFormatter
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
     
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setRecord()
         updateGraph()
         configureGraph()
         configureTextField()
     }
     
+    func getRecord() {
+        let realm = try? Realm()
+        let result = realm? .objects(ChildProfile.self).first
+        child = result
+    }
     
     
     func setRecord() {
-        let realm = try! Realm()
-        var result = Array(realm.objects(DailyCondition.self))
-        result.sort(by: { $0.date < $1.date })
-        recordList = result
+        let realm = try? Realm()
+         guard let id = mainChildData?.id,
+               let result = realm?.objects(ChildProfile.self).filter("id == %@", id).first else { return }
+               var resultCondition = Array(result.dailyCondition)
+               resultCondition.sort(by: { $0.date < $1.date })
+        recordList = resultCondition
         if let startDateText = startTextField.text,
            let endDateText = endTextField.text,
            let startDate = dateFormatter.date(from: startDateText),
            let endDate = dateFormatter.date(from: endDateText) {
-            var filteredRecord = Array(realm.objects(DailyCondition.self).filter("date BETWEEN { %@, %@ }", startDate, endDate))
-            filteredRecord.sort(by: { $0.date < $1.date })
-            recordList = filteredRecord
+           let resultCondition = result.dailyCondition
+           var filterRecord = Array(resultCondition.filter("date BETWEEN { %@, %@ }", startDate, endDate))
+            filterRecord.sort(by: { $0.date < $1.date })
+            recordList = filterRecord
         }
     }
     func updateGraph() {
