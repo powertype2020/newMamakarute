@@ -160,7 +160,7 @@ class CalendarVC: UIViewController, UITabBarDelegate {
              let nextView = storyboard?.instantiateViewController(identifier: "ChildMenuVC") as! ChildMenuVC
                  nextView.delegate = self
                  nextView.presentationController?.delegate = self
-                 present(nextView, animated: true, completion: nil)
+                 present(nextView, animated: false, completion: nil)
              
          }
 }

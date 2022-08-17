@@ -29,6 +29,8 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     
     var getNumber: Int = 0
     
+    var changeChildData: ChildProfile?
+    
     var delegate: ChildMenuVCDelegate?
 
      override func viewDidLoad() {
@@ -58,7 +60,7 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
              if touch.view?.tag == 1 {
                  UIView.animate( withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
                      self.menuView.layer.position.x = -self.menuView.frame.width
-                 }, completion: { bool in self.dismiss(animated: true, completion: nil)
+                 }, completion: { bool in self.dismiss(animated: false, completion: nil)
 
                  }
                  )
@@ -78,7 +80,14 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     
     func transitionToCalendarVC(with child: ChildProfile) {
         delegate?.willClose(with: child)
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
+    }
+    
+    func transitionChangeChildDataVC() {
+        let storyboard = UIStoryboard(name: "ChangeChildDataVC", bundle: nil)
+        guard let changeChildDataViewcontroller = storyboard.instantiateInitialViewController() as? ChangeChildDataVC else { return }
+        changeChildDataViewcontroller.changeChildData = changeChildData
+        present(changeChildDataViewcontroller, animated: true)
     }
     
 
@@ -105,6 +114,19 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let editAction = UIContextualAction(style: .normal, title: "Edit") { (action, view, completionHandler) in
+            let alert = UIAlertController(title: "編集しますか？", message: "データを書き換えることになります", preferredStyle: .alert)
+            let delete = UIAlertAction(title: "編集", style: .default, handler: { (action) -> Void in
+                          print("change button tapped final")
+                self.changeChildData = self.childList[indexPath.row]
+                self.transitionChangeChildDataVC()
+                      })
+            let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
+                          print("Cancel button tapped")
+                    self.dismiss(animated: false, completion: nil)
+                      })
+                alert.addAction(delete)
+                alert.addAction(cancel)
+                self.present(alert, animated: false, completion: nil)
           print("Editがタップされた")
           completionHandler(true)
         }
@@ -119,20 +141,20 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
                     
           let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
                         print("Cancel button tapped")
-                  self.dismiss(animated: true, completion: nil)
+                  self.dismiss(animated: false, completion: nil)
                     })
               alert.addAction(delete)
               alert.addAction(cancel)
-              self.present(alert, animated: true, completion: nil)                })
+              self.present(alert, animated: false, completion: nil)                })
                 
           let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
                     print("Cancel button tapped")
-              self.dismiss(animated: true, completion: nil)
+              self.dismiss(animated: false, completion: nil)
                 })
             
             alert.addAction(delete)
             alert.addAction(cancel)
-            self.present(alert, animated: true, completion: nil)
+            self.present(alert, animated: false, completion: nil)
             
           print("Deleteがタップされた")
             
@@ -140,6 +162,9 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
         }
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
       }
+    
+    
+    
     }
     
 
