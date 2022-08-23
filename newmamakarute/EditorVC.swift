@@ -35,6 +35,7 @@ protocol EditorViewContorollerDelegate {
      @IBOutlet weak var backButton: UIButton!
      
      @IBAction func deleteButton(_ sender: UIButton) {
+         deleteRecord()
      }
      
      @IBAction func backButton(_ sender: UIButton) {
@@ -46,6 +47,7 @@ protocol EditorViewContorollerDelegate {
      }
      
      var childCondition: ChildProfile?
+     var dayRecord: DailyCondition?
      var record = DailyCondition()
      
      
@@ -254,15 +256,35 @@ protocol EditorViewContorollerDelegate {
                     let dateImage = Data?(inputImageData) {
                      record.dateImage = dateImage
                  }
-
              mainChildData?.dailyCondition.append(record)
              }
              delegate?.recordUpdate()
              dismiss(animated: true)
 
          }
+     
+     func deleteRecord() {
+         let realm = try? Realm()
+         dayRecord = record
+         guard let id = dayRecord?.id,
+               let result = realm?.objects(DailyCondition.self).filter("id == %@", id).first else { return }
+         let alert = UIAlertController(title: "データを消しますか？", message: "今までの記録が消えてしまいます", preferredStyle: .alert)
+         let delete = UIAlertAction(title: "削除", style: .default, handler: { (action) -> Void in
+                 print("Delete button tapped")
+             try? realm?.write {
+            realm?.delete(result)
+         }
+             self.dismiss(animated: true, completion: nil)
+ })
+         let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { (action) -> Void in
+                       print("Cancel button tapped")
+                 self.dismiss(animated: false, completion: nil)
+                   })
+             alert.addAction(delete)
+             alert.addAction(cancel)
+             self.present(alert, animated: false, completion: nil)
+     }
  }
-
  extension Notification {
 
      // キーボードの高さ

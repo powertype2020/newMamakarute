@@ -23,6 +23,7 @@ class CalendarVC: UIViewController, UITabBarDelegate {
          var getChildName = ""
          var child: ChildProfile?
          var unwrapChild = ChildProfile.self
+         var childIcon: UIImage!
     
          @IBOutlet weak var calendarView: FSCalendar!
 
@@ -49,20 +50,13 @@ class CalendarVC: UIViewController, UITabBarDelegate {
              navigationController?.navigationBar.tintColor = .white
              navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
-             
-             getRecord()
+             changeData()
+             record()
              configureCalendar()
              configure()
              
              self.title = "カレンダー画面"
              self.view.backgroundColor = .white
-             
-             let screenW:CGFloat = view.frame.size.width
-                     let screenH:CGFloat = view.frame.size.height
-                     childIconImageView.image = UIImage(named: "noImage")
-                     childIconImageView.frame = CGRect(x:0, y:0, width:128, height:128)
-                     childIconImageView.center = CGPoint(x:screenW/2, y:screenH/2)
-                     self.view.addSubview(childIconImageView)
 
              editBarButtonItem = UIBarButtonItem(title: "追加", style: .done, target: self, action: #selector(editBarButtonTapped(_:)))
              addBarButtonItem = UIBarButtonItem(image: UIImage(named: "childMenu")!, style: .done, target: self, action: #selector(addBarButtonTapped(_:)))
@@ -101,15 +95,53 @@ class CalendarVC: UIViewController, UITabBarDelegate {
             print("first!")
         }
     
+    func defaultRecord() {
+        let defaultChild = "No Name"
+        childNameLabel.text = defaultChild
+    }
+    
     func getRecord() {
         let realm = try? Realm()
         let result = realm? .objects(ChildProfile.self).first
-        let resultName = result!.name
+        let resultName = result?.name
         mainChildData = result
         childNameLabel.text = resultName
+        changeData()
+        childIconImageView.image = childIcon
         recordList = Array(result!.dailyCondition)
     }
     
+    func record() {
+        let realm = try? Realm()
+        let result = realm? .objects(ChildProfile.self).first
+        if result != nil {
+            getRecord()
+        } else {
+            defaultRecord()
+        }
+    }
+    
+    func changeData() {
+        if (mainChildData?.icon) != nil {
+            let dataIcon = UIImage(data: (mainChildData?.icon)!)
+            childIcon = dataIcon
+            let screenW:CGFloat = view.frame.size.width
+            let screenH:CGFloat = view.frame.size.height
+            childIconImageView.image = childIcon
+            childIconImageView.frame = CGRect(x:0, y:0, width:128, height:128)
+            childIconImageView.center = CGPoint(x:screenW/2, y:screenH/2)
+            self.view.addSubview(childIconImageView)
+        } else {
+            print("画像がありません")
+            let screenW:CGFloat = view.frame.size.width
+            let screenH:CGFloat = view.frame.size.height
+            childIconImageView.image = UIImage(named: "noImage")
+            childIconImageView.frame = CGRect(x:0, y:0, width:128, height:128)
+            childIconImageView.center = CGPoint(x:screenW/2, y:screenH/2)
+            self.view.addSubview(childIconImageView)
+                    }
+        
+    }
     
     
     func transitionToSignUpView() {
@@ -167,6 +199,8 @@ class CalendarVC: UIViewController, UITabBarDelegate {
     extension CalendarVC: ChildMenuVCDelegate {
          func willClose(with child: ChildProfile) {
              mainChildData = child
+             print("👀\(mainChildData)")
+             recordUpdate()
          }
      }
     
@@ -190,6 +224,7 @@ class CalendarVC: UIViewController, UITabBarDelegate {
 
 extension CalendarVC: EditorViewContorollerDelegate {
     func recordUpdate() {
+        changeData()
         dataReload()
         calendarView.reloadData()
     }
@@ -214,6 +249,7 @@ private extension CalendarVC {
         let resultName = result.name
         let resultCondition = result.dailyCondition
         childNameLabel.text = resultName
+        changeData()
         recordList = Array(resultCondition)
         calendarView.reloadData()
     }

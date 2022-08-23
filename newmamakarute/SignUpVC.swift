@@ -38,13 +38,6 @@ import UIKit
          inputIconImageView.isUserInteractionEnabled = true
          inputIconImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:))))
 
-         let sampleImage = UIImage(named: "noimage")
-         inputIconImageView.image = sampleImage
-
-         let realm = try! Realm()
-         let firstRecord = realm.objects(ChildProfile.self).first
-         print("👀firstRecord: \(String(describing: firstRecord))")
-
          configureChildNameTextField()
 
      }
