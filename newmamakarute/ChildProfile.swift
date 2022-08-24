@@ -17,4 +17,3 @@ class ChildProfile: Object {
     @objc dynamic var icon: Data?
     let dailyCondition = List<DailyCondition>()
 }
-

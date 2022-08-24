@@ -9,7 +9,7 @@ import Foundation
 import UIKit
  import RealmSwift
 
- class SignUpVC: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+ class SignUpVC: UIViewController {
 
      
 
@@ -25,48 +25,25 @@ import UIKit
          saveRecord()
 
      }
-
-
+     
+     let imagePicker = UIImagePickerController()
+     
      var record = ChildProfile()
      
      override func viewDidLoad() {
          super.viewDidLoad()
-
-         let sampleImage = UIImage(named: "noimage")
-         inputIconImageView.image = sampleImage
-
-         let realm = try! Realm()
-         let firstRecord = realm.objects(ChildProfile.self).first
-         print("👀firstRecord: \(String(describing: firstRecord))")
+         
+         imagePicker.delegate   = self
+         imagePicker.sourceType = .photoLibrary
+         inputIconImageView.isUserInteractionEnabled = true
+         inputIconImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:))))
 
          configureChildNameTextField()
 
      }
 
      @objc func imageViewTapped(_ sender: UITapGestureRecognizer) {
-         // カメラロールが利用可能か
-                 if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-                     // 写真を選ぶビュー
-                     let pickerView = UIImagePickerController()
-                     // 写真の選択元をカメラロールにする
-                     // 「.camera」にすればカメラを起動できる
-                     pickerView.sourceType = .photoLibrary
-                     // デリゲート
-                     pickerView.delegate = self
-                     // ビューに表示
-                     self.present(pickerView, animated: true)
-                 }
-
-     }
-
-     // 写真を選んだ後に呼ばれる処理
-     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-         // 選択した写真を取得する
-         let image = info[.originalImage] as! UIImage
-         // ビューに表示する
-         inputIconImageView.image = image
-         // 写真を選ぶビューを引っ込める
-         self.dismiss(animated: true)
+                     self.present(imagePicker, animated: true,completion: nil)
      }
 
      func saveRecord() {
@@ -78,7 +55,7 @@ import UIKit
              }
              if let inputIconData = inputIconImageView.image?.pngData(),
                 let dateImage = Data?(inputIconData) {
-                 record.icon = dateImage
+                record.icon = dateImage
              }
 
              realm.add(record)
@@ -107,5 +84,35 @@ extension Array {
     subscript (element index: Index) -> Element? {
         // 配列にない要素があればnilを返す
         indices.contains(index) ? self[index] : nil
+    }
+}
+
+extension SignUpVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickerImage = info[.originalImage] as? UIImage {
+            // 10%に圧縮した画像
+            let resizedImage          = pickerImage.resizeImage(withPercentage: 0.1)!
+            // imageViewに挿入
+            inputIconImageView.image = resizedImage
+        }
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+}
+
+extension UIImage {
+    // percentage:圧縮率
+    func resizeImage(withPercentage percentage: CGFloat) -> UIImage? {
+        // 圧縮後のサイズ情報
+        let canvas = CGSize(width: size.width * percentage, height: size.height * percentage)
+        // 圧縮画像を返す
+        return UIGraphicsImageRenderer(size: canvas, format: imageRendererFormat).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        }
     }
 }
