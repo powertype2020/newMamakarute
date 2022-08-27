@@ -184,10 +184,8 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
         }
         dataReload()
         childNameTableView.reloadData()
-        mainChildData = childList[0]
-    }
-    
-    
+        mainChildData = nil
+        }
     }
 
 extension ChildMenuVC {

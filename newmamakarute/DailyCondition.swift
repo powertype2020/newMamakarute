@@ -18,7 +18,7 @@ import RealmSwift
      @objc dynamic var height: Double = 0
      @objc dynamic var weight: Double = 0
      @objc dynamic var temperature: Double = 0
-     @objc dynamic var memo: String?
+     @objc dynamic var memo: String = ""
      @objc dynamic var dateImage: Data?
  }
 

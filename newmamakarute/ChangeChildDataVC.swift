@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 
-class ChangeChildDataVC: UIViewController, UIAdaptivePresentationControllerDelegate {
+class ChangeChildDataVC: UIViewController, UIAdaptivePresentationControllerDelegate, UITextFieldDelegate {
     
     var changeChildData: ChildProfile?
     
@@ -31,7 +31,7 @@ class ChangeChildDataVC: UIViewController, UIAdaptivePresentationControllerDeleg
         
         changeData()
         
-        print(changeChildData)
+        changeButton.isEnabled = false
         
         changeChildName.text = changeChildData?.name
         changeChildImage.image = changeIcon
@@ -39,9 +39,79 @@ class ChangeChildDataVC: UIViewController, UIAdaptivePresentationControllerDeleg
         imagePicker.sourceType = .photoLibrary
         changeChildImage.isUserInteractionEnabled = true
         changeChildImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:))))
+        changeChildName.delegate = self
+    }
+    
+    func textField(_ textField: UITextField,
+                       shouldChangeCharactersIn range: NSRange,
+                       replacementString string: String) -> Bool
+        {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                self.changeButton.isEnabled = !(textField.text?.isEmpty ?? true)
+            }
+            return true
+        }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let notification = NotificationCenter.default
+                notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)),
+                                         name: UIResponder.keyboardWillShowNotification,
+                                         object: nil)
+                notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)),
+                                         name: UIResponder.keyboardWillHideNotification,
+                                         object: nil)
         
     }
     
+    @objc func keyboardWillShow(_ notification: Notification) {
+            // 編集中のtextFieldを取得
+            guard let textField = changeChildName else { return }
+            // キーボード、画面全体、textFieldのsizeを取得
+            let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            guard let keyboardHeight = rect?.size.height else { return }
+            let mainBoundsSize = UIScreen.main.bounds.size
+            let textFieldHeight = textField.frame.height
+
+            let textFieldPositionY = textField.frame.origin.y + textFieldHeight + 70.0
+            let keyboardPositionY = mainBoundsSize.height - keyboardHeight
+            
+            if keyboardPositionY <= textFieldPositionY {
+                let duration: TimeInterval? =
+                    notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double
+                UIView.animate(withDuration: duration!) {
+                    self.view.transform = CGAffineTransform(translationX: 0, y: keyboardPositionY - textFieldPositionY)
+                }
+            }
+        }
+
+        // キーボード非表示通知の際の処理
+        @objc func keyboardWillHide(_ notification: Notification) {
+            let duration: TimeInterval? = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Double
+            UIView.animate(withDuration: duration!) {
+                self.view.transform = CGAffineTransform.identity
+            }
+        }
+
+        // textFieldがタップされた際に呼ばれる
+        func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+            // 編集中のtextFieldを保持する
+            changeChildName = textField
+            return true
+        }
+        
+        // リターンがタップされた時にキーボードを閉じる
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            textField.resignFirstResponder()
+            return true
+        }
+        
+        // 画面をタップした時にキーボードを閉じる
+        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            self.view.endEditing(true)
+        }
     
     func changeData() {
         if (changeChildData?.icon) != nil {
@@ -115,7 +185,7 @@ extension ChangeChildDataVC: UIImagePickerControllerDelegate, UINavigationContro
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickerImage = info[.originalImage] as? UIImage {
             // 10%に圧縮した画像
-            let resizedImage = pickerImage.resizeImage(withPercentage: 0.1)!
+            let resizedImage = pickerImage.changeResizeImage(withPercentage: 0.1)!
             // imageViewに挿入
             changeChildImage.image = resizedImage
         }
@@ -135,5 +205,17 @@ extension ChangeChildDataVC {
             return
         }
         presentationController.delegate?.presentationControllerDidDismiss?(presentationController)
+    }
+}
+
+extension UIImage {
+    // percentage:圧縮率
+    func changeResizeImage(withPercentage percentage: CGFloat) -> UIImage? {
+        // 圧縮後のサイズ情報
+        let canvas = CGSize(width: size.width * percentage, height: size.height * percentage)
+        // 圧縮画像を返す
+        return UIGraphicsImageRenderer(size: canvas, format: imageRendererFormat).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        }
     }
 }

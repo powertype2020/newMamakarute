@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8r6-xQ-BlY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="oGO-cH-3BL">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item 2-->
+        <!--グラフ-->
         <scene sceneID="vFO-6V-AMP">
             <objects>
                 <viewController storyboardIdentifier="GraphVC" id="9YZ-EV-E9S" customClass="GraphVC" customModule="newmamakarute" customModuleProvider="target" sceneMemberID="viewController">
@@ -18,12 +17,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Etw-69-CK4" customClass="LineChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="125" width="414" height="588"/>
+                                <rect key="frame" x="20" y="125" width="374" height="588"/>
                                 <color key="backgroundColor" systemColor="systemGrayColor"/>
                             </view>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pEi-xU-VPh">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pEi-xU-VPh">
                                 <rect key="frame" x="40" y="769" width="125" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="〜" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9w-T3-1bh">
@@ -58,12 +57,12 @@
                                     <action selector="selectGraph:" destination="9YZ-EV-E9S" eventType="valueChanged" id="sQg-To-DGE"/>
                                 </connections>
                             </segmentedControl>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="njI-vF-8b3">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="njI-vF-8b3">
                                 <rect key="frame" x="249" y="769" width="125" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="DbC-6e-Lov"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
@@ -73,13 +72,14 @@
                             <constraint firstItem="njI-vF-8b3" firstAttribute="top" secondItem="Etw-69-CK4" secondAttribute="bottom" constant="56" id="0Km-F4-gWJ"/>
                             <constraint firstItem="njI-vF-8b3" firstAttribute="leading" secondItem="g9w-T3-1bh" secondAttribute="trailing" constant="9" id="39k-mP-eeF"/>
                             <constraint firstItem="g9w-T3-1bh" firstAttribute="leading" secondItem="pEi-xU-VPh" secondAttribute="trailing" constant="9.5" id="6Zo-xD-vx3"/>
-                            <constraint firstItem="Etw-69-CK4" firstAttribute="leading" secondItem="hL4-l1-0bd" secondAttribute="leading" id="CZ7-5t-DVS"/>
+                            <constraint firstItem="Etw-69-CK4" firstAttribute="leading" secondItem="hL4-l1-0bd" secondAttribute="leading" constant="20" id="CZ7-5t-DVS"/>
                             <constraint firstItem="Etw-69-CK4" firstAttribute="centerX" secondItem="hL4-l1-0bd" secondAttribute="centerX" id="GgL-zJ-j0p"/>
                             <constraint firstItem="g9w-T3-1bh" firstAttribute="top" secondItem="gAx-wN-e2m" secondAttribute="bottom" id="Spj-Bb-yEh"/>
                             <constraint firstItem="Etw-69-CK4" firstAttribute="top" secondItem="Tj3-F4-WJK" secondAttribute="bottom" constant="30" id="WEa-nF-5TZ"/>
                             <constraint firstItem="Tj3-F4-WJK" firstAttribute="centerX" secondItem="hL4-l1-0bd" secondAttribute="centerX" id="c9E-yX-2ed"/>
                             <constraint firstItem="g9w-T3-1bh" firstAttribute="centerX" secondItem="gAx-wN-e2m" secondAttribute="centerX" id="jEa-n3-iBe"/>
                             <constraint firstItem="Tjo-hd-JF3" firstAttribute="trailing" secondItem="njI-vF-8b3" secondAttribute="trailing" constant="40" id="jT7-OP-M0b"/>
+                            <constraint firstItem="Tjo-hd-JF3" firstAttribute="trailing" secondItem="Etw-69-CK4" secondAttribute="trailing" constant="20" id="oNI-NQ-qvR"/>
                             <constraint firstItem="Tj3-F4-WJK" firstAttribute="top" secondItem="Tjo-hd-JF3" secondAttribute="top" constant="20" id="qUX-ZO-b5z"/>
                             <constraint firstItem="pEi-xU-VPh" firstAttribute="top" secondItem="njI-vF-8b3" secondAttribute="top" id="xc9-14-kMu"/>
                             <constraint firstAttribute="bottom" secondItem="Etw-69-CK4" secondAttribute="bottom" constant="183" id="xdx-Z9-V3M"/>
@@ -89,7 +89,7 @@
                             <constraint firstItem="gAx-wN-e2m" firstAttribute="top" secondItem="Etw-69-CK4" secondAttribute="bottom" constant="28" id="zxf-jk-qkm"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" tag="1" title="Item 2" image="alt" catalog="system" id="8Ee-4d-5Rc"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="グラフ" image="alt" catalog="system" id="8Ee-4d-5Rc"/>
                     <connections>
                         <outlet property="endTextField" destination="njI-vF-8b3" id="7js-nm-zKE"/>
                         <outlet property="graphView" destination="Etw-69-CK4" id="AkK-KM-yRQ"/>
@@ -99,12 +99,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ur1-Oh-G2T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1543.2" y="264.91754122938534"/>
+            <point key="canvasLocation" x="1542.0289855072465" y="264.50892857142856"/>
         </scene>
         <!--CalendarVC-->
         <scene sceneID="Tga-ua-caZ">
             <objects>
-                <viewController storyboardIdentifier="CalendarVC" id="rtC-XU-X1B" customClass="CalendarVC" customModule="newmamakarute" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CalendarVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rtC-XU-X1B" customClass="CalendarVC" customModule="newmamakarute" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kUJ-ws-Mmf">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -116,23 +116,15 @@
                                     <constraint firstAttribute="width" constant="66" id="dmi-4c-hAp"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Nn-jf-A23">
-                                <rect key="frame" x="298.5" y="696.5" width="77" height="77"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Nn-jf-A23">
+                                <rect key="frame" x="300" y="694" width="75.5" height="81.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="81.5" id="0rf-4N-8XK"/>
                                     <constraint firstAttribute="width" constant="75.5" id="weh-wi-Nur"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal">
+                                <state key="normal" image="editorIcon">
                                     <color key="titleColor" red="1" green="0.01983951104" blue="0.63679774580000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <imageReference key="backgroundImage" image="pencil.tip.crop.circle.badge.plus" catalog="system" symbolScale="small" renderingMode="hierarchical">
-                                        <hierarchicalColors>
-                                            <color systemColor="systemPinkColor"/>
-                                            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="0.69522977037494682" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color systemColor="systemPinkColor"/>
-                                        </hierarchicalColors>
-                                    </imageReference>
                                 </state>
                                 <connections>
                                     <action selector="addButton:" destination="rtC-XU-X1B" eventType="touchUpInside" id="KDb-zL-aOw"/>
@@ -148,6 +140,19 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cdO-sp-4bM">
+                                <rect key="frame" x="40" y="709.5" width="50" height="49.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="8Re-nc-WY7"/>
+                                    <constraint firstAttribute="width" constant="50" id="nrG-rm-4i9"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="HELP!" backgroundImage="bubble.right" catalog="system"/>
+                                <connections>
+                                    <action selector="helpButton:" destination="rtC-XU-X1B" eventType="touchUpInside" id="ERH-vA-dMo"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qAp-dF-iND"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -163,6 +168,8 @@
                             <constraint firstAttribute="trailingMargin" secondItem="2Nn-jf-A23" secondAttribute="trailing" constant="18.5" id="dZQ-Oa-zJB"/>
                             <constraint firstItem="Z9b-b3-Qod" firstAttribute="trailing" secondItem="kUJ-ws-Mmf" secondAttribute="trailingMargin" id="fjw-uo-ury"/>
                             <constraint firstItem="agf-cp-RDT" firstAttribute="leading" secondItem="148-iC-xei" secondAttribute="trailing" constant="20" id="jl2-oY-Bwy"/>
+                            <constraint firstItem="cdO-sp-4bM" firstAttribute="leading" secondItem="qAp-dF-iND" secondAttribute="leading" constant="40" id="oKh-HI-9om"/>
+                            <constraint firstItem="qAp-dF-iND" firstAttribute="bottom" secondItem="cdO-sp-4bM" secondAttribute="bottom" constant="54" id="tTm-DD-oyo"/>
                             <constraint firstItem="Z9b-b3-Qod" firstAttribute="top" secondItem="148-iC-xei" secondAttribute="bottom" constant="20" id="y4t-wv-eit"/>
                         </constraints>
                     </view>
@@ -172,12 +179,13 @@
                         <outlet property="calendarView" destination="Z9b-b3-Qod" id="od9-eY-Rvs"/>
                         <outlet property="childIconImageView" destination="148-iC-xei" id="Y18-xh-Gut"/>
                         <outlet property="childNameLabel" destination="agf-cp-RDT" id="Kq6-fN-f9H"/>
+                        <outlet property="helpButton" destination="cdO-sp-4bM" id="ylZ-LV-z68"/>
                         <segue destination="mHt-13-0UK" kind="presentation" identifier="showMenu" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="r0H-j3-XeE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="spe-KU-h10" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1541.5999999999999" y="-342.27886056971516"/>
+            <point key="canvasLocation" x="1540.5797101449277" y="-342.85714285714283"/>
         </scene>
         <!--Child MenuVC-->
         <scene sceneID="liH-nK-JQ4">
@@ -258,10 +266,40 @@
             </objects>
             <point key="canvasLocation" x="2326.0869565217395" y="-340.84821428571428"/>
         </scene>
+        <!--Start UpVC-->
+        <scene sceneID="hvZ-BC-ry7">
+            <objects>
+                <viewController storyboardIdentifier="StartUpVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oGO-cH-3BL" customClass="StartUpVC" customModule="newmamakarute" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7ae-v9-lV8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ママかるて-cutout" translatesAutoresizingMaskIntoConstraints="NO" id="2T6-Nd-kUg">
+                                <rect key="frame" x="87" y="227" width="240" height="296"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="kRB-ku-dt1"/>
+                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <constraints>
+                            <constraint firstItem="kRB-ku-dt1" firstAttribute="trailing" secondItem="2T6-Nd-kUg" secondAttribute="trailing" constant="87" id="IDs-wJ-Cbd"/>
+                            <constraint firstItem="2T6-Nd-kUg" firstAttribute="leading" secondItem="kRB-ku-dt1" secondAttribute="leading" constant="87" id="NT9-Bi-6Fh"/>
+                            <constraint firstItem="2T6-Nd-kUg" firstAttribute="centerY" secondItem="7ae-v9-lV8" secondAttribute="centerY" constant="-73" id="cbV-M9-WSl"/>
+                            <constraint firstItem="2T6-Nd-kUg" firstAttribute="centerX" secondItem="7ae-v9-lV8" secondAttribute="centerX" id="viR-he-ebh"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="startImage" destination="2T6-Nd-kUg" id="aNr-f3-DXd"/>
+                        <segue destination="8r6-xQ-BlY" kind="presentation" identifier="start" animates="NO" modalPresentationStyle="overCurrentContext" id="uSp-gw-PVQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UoX-GD-lii" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1136.231884057971" y="-38.169642857142854"/>
+        </scene>
         <!--Main Tab BarVC-->
         <scene sceneID="Gek-xw-0GN">
             <objects>
-                <tabBarController id="8r6-xQ-BlY" customClass="MainTabBarVC" customModule="newmamakarute" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="MainTabBarVC" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8r6-xQ-BlY" customClass="MainTabBarVC" customModule="newmamakarute" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="9wn-kl-yEw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -278,17 +316,18 @@
             </objects>
             <point key="canvasLocation" x="-254" y="-37"/>
         </scene>
-        <!--Item 1-->
+        <!--カレンダー-->
         <scene sceneID="LmU-yO-0QQ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="D1C-Pp-Bsq" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item 1" image="calendar" catalog="system" id="Ucd-7F-PPP"/>
+                    <tabBarItem key="tabBarItem" title="カレンダー" image="calendar" catalog="system" id="Ucd-7F-PPP"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cSk-6e-jsI">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="1" green="0.01983951104" blue="0.63679774580000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" systemColor="tintColor"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </textAttributes>
@@ -296,11 +335,22 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </textAttributes>
                         <navigationBarAppearance key="standardAppearance">
-                            <color key="backgroundColor" red="1" green="0.01983951104" blue="0.63679774580000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" systemColor="systemPinkColor"/>
+                            <textAttributes key="titleTextAttributes">
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </textAttributes>
+                            <textAttributes key="largeTitleTextAttributes">
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </textAttributes>
                         </navigationBarAppearance>
                         <navigationBarAppearance key="scrollEdgeAppearance">
-                            <color key="backgroundColor" red="1" green="0.01983951104" blue="0.63679774580000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <textAttributes key="titleTextAttributes"/>
+                            <color key="backgroundColor" systemColor="systemPinkColor"/>
+                            <textAttributes key="titleTextAttributes">
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </textAttributes>
+                            <textAttributes key="largeTitleTextAttributes">
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </textAttributes>
                         </navigationBarAppearance>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -315,8 +365,10 @@
     </scenes>
     <resources>
         <image name="alt" catalog="system" width="128" height="106"/>
+        <image name="bubble.right" catalog="system" width="128" height="110"/>
         <image name="calendar" catalog="system" width="128" height="106"/>
-        <image name="pencil.tip.crop.circle.badge.plus" catalog="system" width="128" height="113"/>
+        <image name="editorIcon" width="64" height="64"/>
+        <image name="ママかるて-cutout" width="269" height="296"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

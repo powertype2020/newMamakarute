@@ -25,14 +25,29 @@ class CalendarVC: UIViewController, UITabBarDelegate {
          var unwrapChild = ChildProfile.self
          var childIcon: UIImage!
     
-         @IBOutlet weak var calendarView: FSCalendar!
+    @IBOutlet weak var helpButton: UIButton!
+    
+    @IBOutlet weak var calendarView: FSCalendar!
 
     @IBOutlet weak var addButton: UIButton!
 
     @IBAction func addButton(_ sender: UIButton) {
-        transitionToEditorView()
+        if mainChildData != nil {
+            transitionToEditorView()
+        } else {
+            let alert = UIAlertController(title: "左上のアイコンから子供を選択してください！", message: "未登録であれば右上のアイコンから登録しましょう！", preferredStyle: .alert)
+            present(alert, animated: true, completion: nil)
+            let ok = UIAlertAction(title: "OK", style: .default) { (action) in
+            }
+            alert.addAction(ok)
+            let calendarVC = CalendarVC()
+            present(calendarVC, animated: true, completion: nil)
+        }
          }
     
+    @IBAction func helpButton(_ sender: UIButton) {
+        transitionToHelp()
+    }
     
      
     @IBOutlet weak var childNameLabel: UILabel!
@@ -44,25 +59,25 @@ class CalendarVC: UIViewController, UITabBarDelegate {
 
          override func viewDidLoad() {
              super.viewDidLoad()
-             self.title = "calendar"
              
-             navigationController?.navigationBar.barTintColor = .systemPink
-             navigationController?.navigationBar.tintColor = .white
-             navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
              changeData()
              record()
              configureCalendar()
              configure()
              
-             self.title = "カレンダー画面"
-             self.view.backgroundColor = .white
-
-             editBarButtonItem = UIBarButtonItem(title: "追加", style: .done, target: self, action: #selector(editBarButtonTapped(_:)))
-             addBarButtonItem = UIBarButtonItem(image: UIImage(named: "childMenu")!, style: .done, target: self, action: #selector(addBarButtonTapped(_:)))
+             let imageView = UIImageView()
+             imageView.image = UIImage(named: "CalendarVCTitle")
+             imageView.contentMode = .scaleAspectFit
+             self.navigationItem.titleView = imageView
+             
+             editBarButtonItem = UIBarButtonItem(image: UIImage(named: "plusIcon"), style: .done, target: self, action: #selector(editBarButtonTapped(_:)))
+             addBarButtonItem = UIBarButtonItem(image: UIImage(named: "humbgIcon")!, style: .done, target: self, action: #selector(addBarButtonTapped(_:)))
 
              self.navigationItem.rightBarButtonItems = [editBarButtonItem]
              self.navigationItem.leftBarButtonItems = [addBarButtonItem]
+
+             editBarButtonItem.imageInsets = UIEdgeInsets(top: -5, left: 0, bottom: 0, right: 0)
+             addBarButtonItem.imageInsets = UIEdgeInsets(top: -5, left: 0, bottom: 0, right: 0)
              
              print(Realm.Configuration.defaultConfiguration.fileURL!)
              
@@ -157,6 +172,12 @@ class CalendarVC: UIViewController, UITabBarDelegate {
             editorViewcontroller.record = record
         }
         present(editorViewcontroller, animated: true)
+    }
+    
+    func transitionToHelp() {
+        let storyboard = UIStoryboard(name: "HelpVC", bundle: nil)
+        guard let helpViewController = storyboard.instantiateInitialViewController() as? HelpVC else { return }
+        present(helpViewController, animated: true)
     }
     
     

@@ -22,7 +22,6 @@ protocol EditorViewContorollerDelegate {
      @IBOutlet weak var inputTemperatureTextField: UITextField!
 
      @IBOutlet weak var inputMemoTextView: UITextView!
-     @IBOutlet weak var inputMemoTextViewHeight: NSLayoutConstraint!
 
      @IBOutlet weak var inputDateTextField: UITextField!
 
@@ -49,8 +48,9 @@ protocol EditorViewContorollerDelegate {
      var childCondition: ChildProfile?
      var dayRecord: DailyCondition?
      var record = DailyCondition()
-     
-     
+     var dateList: [DailyCondition] = []
+     var getTextViewHeight: CGFloat = 0.0
+     var dateImage: UIImage!
      var delegate: EditorViewContorollerDelegate?
 
      var datePicker: UIDatePicker {
@@ -78,93 +78,75 @@ protocol EditorViewContorollerDelegate {
 
      override func viewDidLoad() {
          super.viewDidLoad()
+         changeDateImage()
          configureHeightTextField()
          configureDateTextField()
          inputMemoTextView.delegate = self
          inputImage.isUserInteractionEnabled = true
          inputImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:))))
-
-         
-         let sampleImage = UIImage(named: "noimage")
-         inputImage.image = sampleImage
-
          print("👀record: \(record)")
      }
 
      override func viewWillAppear(_ animated: Bool) {
          super.viewWillAppear(animated)
-         if(!isObseving) {
-             let notification = NotificationCenter.default
-             notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:))
-                                                  , name: UIResponder.keyboardWillShowNotification, object: nil)
-             notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:))
-                                                  , name: UIResponder.keyboardWillHideNotification, object: nil)
-             isObseving = true
-         }
+         
+         NotificationCenter.default.addObserver(self,
+                                                    selector: #selector(keyboardWillShow),
+                                                    name: UIResponder.keyboardWillShowNotification,
+                                                    object: nil)
+             NotificationCenter.default.addObserver(self,
+                                                    selector: #selector(keyboardWillHide),
+                                                    name: UIResponder.keyboardWillHideNotification,
+                                                    object: nil)
+         
      }
 
      override func viewWillDisappear(_ animated: Bool) {
          super.viewWillDisappear(animated)
-         if(isObseving) {
-             let notification = NotificationCenter.default
-             notification.removeObserver(self)
-             notification.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-             notification.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-             isObseving = false
-         }
+         
      }
-
+     
      @objc private func keyboardWillShow(_ notification: Notification) {
+         guard let textView = inputMemoTextView else { return }
+         let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+         guard let keyboardHeight = rect?.size.height else { return }
+         let mainBoundsSize = UIScreen.main.bounds.size
+         let textViewHeight = textView.frame.height
 
-         // キーボードの分だけViewを上にずらす
-         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-             if self.view.frame.origin.y == 0 {
-                         self.view.frame.origin.y -= keyboardSize.height
-                     } else {
-                         let suggestionHeight = self.view.frame.origin.y + keyboardSize.height
-                         self.view.frame.origin.y -= suggestionHeight
-                     }
-         }
-         guard let keyboardHeight = notification.keyboardHeight,
-               let keyboardAnimationDuration = notification.keybaordAnimationDuration,
-               let KeyboardAnimationCurve = notification.keyboardAnimationCurve
-         else { return }
-
-         UIView.animate(withDuration: keyboardAnimationDuration,
-                        delay: 0,
-                        options: UIView.AnimationOptions(rawValue: KeyboardAnimationCurve)) {
-             // ちょっとTextViewを広げる
-             self.inputMemoTextViewHeight.constant = 125
+         let textViewPositionY = textView.frame.origin.y + textViewHeight + 50.0
+         let keyboardPositionY = mainBoundsSize.height - keyboardHeight
+         
+         if keyboardPositionY <= textViewPositionY {
+             let duration: TimeInterval? =
+                 notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double
+             UIView.animate(withDuration: duration!) {
+                 self.view.transform = CGAffineTransform(translationX: 0, y: keyboardPositionY - textViewPositionY)
+             }
          }
      }
 
      @objc private func keyboardWillHide(_ notification: Notification) {
-         // キーボードを閉じたときにViewを元の位置に戻す
-         if self.view.frame.origin.y != 0 {
-                     self.view.frame.origin.y = 0
-                 }
-
-         guard let keyboardAnimationDuration = notification.keybaordAnimationDuration,
-               let KeyboardAnimationCurve = notification.keyboardAnimationCurve
-         else { return }
-
-
-
-
-         UIView.animate(withDuration: keyboardAnimationDuration,
-                        delay: 0,
-                        options: UIView.AnimationOptions(rawValue: KeyboardAnimationCurve)) {
-             // Text Viewを元のサイズに戻す
-             self.inputMemoTextViewHeight.constant = 81
+         let duration: TimeInterval? = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Double
+         UIView.animate(withDuration: duration!) {
+             self.view.transform = CGAffineTransform.identity
          }
      }
-
-     func textViewDidChange(_ textView: UITextView) {
-         let maxHeight = 80.0
-         if(inputMemoTextView.frame.size.height.native < maxHeight) {
-             let size:CGSize = inputMemoTextView.sizeThatFits(inputMemoTextView.frame.size)
-             inputMemoTextViewHeight.constant = size.height
-         }
+     
+     // textFieldがタップされた際に呼ばれる
+     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+         inputMemoTextView = textView
+         return true
+     }
+     
+     // リターンがタップされた時にキーボードを閉じる
+     func textViewShouldReturn(_ textView: UITextView) -> Bool {
+         textView.resignFirstResponder()
+         return true
+     }
+     
+     // 画面をタップした時にキーボードを閉じる
+     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+         self.view.endEditing(true)
      }
 
      @objc func didTapDone() {
@@ -184,12 +166,22 @@ protocol EditorViewContorollerDelegate {
          inputHeightTextField.text = String(record.height)
          inputWeightTextField.text = String(record.weight)
          inputTemperatureTextField.text = String(record.temperature)
+         inputMemoTextView.text = String(record.memo)
          inputDateTextField.text = dateFormatter.string(from: record.date)
+         inputImage.image = dateImage
      }
-
+     
+     func changeDateImage() {
+         if (record.dateImage) != nil {
+             let changeDateImage = UIImage(data: (record.dateImage)!)
+             dateImage = changeDateImage
+         } else {
+             print("画像がありません")
+         }
+         
+     }
      func configureDateTextField() {
          inputDateTextField.inputView = datePicker
-         inputDateTextField.text = dateFormatter.string(from: Date())
      }
 
      @objc func didChangeDate(picker: UIDatePicker) {
@@ -217,17 +209,6 @@ protocol EditorViewContorollerDelegate {
 
      }
 
-     // 写真を選んだ後に呼ばれる処理
-     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-         // 選択した写真を取得する
-         let image = info[.originalImage] as! UIImage
-         // ビューに表示する
-         inputImage.image = image
-         // 写真を選ぶビューを引っ込める
-         self.dismiss(animated: true)
-     }
-
-
 
      func saveRecord() {
          let realm = try? Realm()
@@ -249,7 +230,7 @@ protocol EditorViewContorollerDelegate {
                      record.temperature = temperature
                  }
                  if let memoText = inputMemoTextView.text,
-                    let memo = String?(memoText) {
+                    let memo: String = String?(memoText) {
                      record.memo = memo
                  }
                  if let inputImageData = inputImage.image?.pngData(),
@@ -284,7 +265,24 @@ protocol EditorViewContorollerDelegate {
              alert.addAction(cancel)
              self.present(alert, animated: false, completion: nil)
      }
+     
+     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+             if let pickerImage = info[.originalImage] as? UIImage {
+                 // 10%に圧縮した画像
+                 let resizedImage          = pickerImage.editorResizeImage(withPercentage: 0.1)!
+                 // imageViewに挿入
+                 inputImage.image = resizedImage
+             }
+             dismiss(animated: true, completion: nil)
+         }
+
+         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+             dismiss(animated: true, completion: nil)
+         }
  }
+
+
+
  extension Notification {
 
      // キーボードの高さ
@@ -305,3 +303,16 @@ protocol EditorViewContorollerDelegate {
 
 
  }
+
+
+extension UIImage {
+    // percentage:圧縮率
+    func editorResizeImage(withPercentage percentage: CGFloat) -> UIImage? {
+        // 圧縮後のサイズ情報
+        let canvas = CGSize(width: size.width * percentage, height: size.height * percentage)
+        // 圧縮画像を返す
+        return UIGraphicsImageRenderer(size: canvas, format: imageRendererFormat).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        }
+    }
+}

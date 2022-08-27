@@ -141,6 +141,8 @@ class GraphVC: UIViewController {
         let dateList = recordList.map({ $0.date })
         titleFormatter.dateList = dateList
         graphView.xAxis.valueFormatter = titleFormatter
+        graphView.rightAxis.enabled = false
+        
     }
     
     @objc func didTapDone() {

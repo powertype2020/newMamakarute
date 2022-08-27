@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      UINavigationBar.appearance().tintColor = UIColor.white
                      UINavigationBar.appearance().barTintColor = UIColor.white
                      UINavigationBar.appearance().isTranslucent = false
-             UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+                     UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
 
                      //タブバーコントローラー
                      UITabBar.appearance().tintColor = UIColor.white

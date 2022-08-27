@@ -9,7 +9,7 @@ import Foundation
 import UIKit
  import RealmSwift
 
- class SignUpVC: UIViewController {
+ class SignUpVC: UIViewController, UITextFieldDelegate {
 
      
 
@@ -23,7 +23,6 @@ import UIKit
 
      @IBAction func signUpButton(_ sender: UIButton) {
          saveRecord()
-
      }
      
      let imagePicker = UIImagePickerController()
@@ -33,15 +32,90 @@ import UIKit
      override func viewDidLoad() {
          super.viewDidLoad()
          
+         inputChildNameTextField.text = ""
+         signUpButton.isEnabled = false
+
          imagePicker.delegate   = self
          imagePicker.sourceType = .photoLibrary
          inputIconImageView.isUserInteractionEnabled = true
          inputIconImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:))))
 
+         inputChildNameTextField.delegate = self
          configureChildNameTextField()
 
      }
+     
+     func textField(_ textField: UITextField,
+                        shouldChangeCharactersIn range: NSRange,
+                        replacementString string: String) -> Bool
+         {
+             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                 self.signUpButton.isEnabled = !(textField.text?.isEmpty ?? true)
+             }
+             return true
+         }
 
+     
+     override func viewWillAppear(_ animated: Bool) {
+         super.viewWillAppear(animated)
+         
+         let notification = NotificationCenter.default
+                 notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)),
+                                          name: UIResponder.keyboardWillShowNotification,
+                                          object: nil)
+                 notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)),
+                                          name: UIResponder.keyboardWillHideNotification,
+                                          object: nil)
+         
+     }
+     
+     @objc func keyboardWillShow(_ notification: Notification) {
+             // 編集中のtextFieldを取得
+             guard let textField = inputChildNameTextField else { return }
+             // キーボード、画面全体、textFieldのsizeを取得
+             let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+             guard let keyboardHeight = rect?.size.height else { return }
+             let mainBoundsSize = UIScreen.main.bounds.size
+             let textFieldHeight = textField.frame.height
+
+             let textFieldPositionY = textField.frame.origin.y + textFieldHeight + 70.0
+             let keyboardPositionY = mainBoundsSize.height - keyboardHeight
+             
+             if keyboardPositionY <= textFieldPositionY {
+                 let duration: TimeInterval? =
+                     notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double
+                 UIView.animate(withDuration: duration!) {
+                     self.view.transform = CGAffineTransform(translationX: 0, y: keyboardPositionY - textFieldPositionY)
+                 }
+             }
+         }
+     
+     @objc func keyboardWillHide(_ notification: Notification) {
+             let duration: TimeInterval? = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Double
+             UIView.animate(withDuration: duration!) {
+                 self.view.transform = CGAffineTransform.identity
+             }
+         }
+
+         // textFieldがタップされた際に呼ばれる
+         func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+             // 編集中のtextFieldを保持する
+             inputChildNameTextField = textField
+             return true
+         }
+         
+         // リターンがタップされた時にキーボードを閉じる
+         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+             textField.resignFirstResponder()
+             return true
+         }
+         
+         // 画面をタップした時にキーボードを閉じる
+         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+             self.view.endEditing(true)
+         }
+     
+     
      @objc func imageViewTapped(_ sender: UITapGestureRecognizer) {
                      self.present(imagePicker, animated: true,completion: nil)
      }
