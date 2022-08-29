@@ -32,7 +32,7 @@ class ChangeChildDataVC: UIViewController, UIAdaptivePresentationControllerDeleg
         changeData()
         
         changeButton.isEnabled = false
-        
+        configureChildNameTextField()
         changeChildName.text = changeChildData?.name
         changeChildImage.image = changeIcon
         imagePicker.delegate   = self
@@ -94,7 +94,18 @@ class ChangeChildDataVC: UIViewController, UIAdaptivePresentationControllerDeleg
                 self.view.transform = CGAffineTransform.identity
             }
         }
+    
+    @objc func didTapDone() {
+        view.endEditing(true)
+    }
 
+    func configureChildNameTextField() {
+        let toolBarRect = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35)
+        let toolBar = UIToolbar(frame: toolBarRect)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDone))
+        toolBar.setItems([doneItem], animated: true)
+        changeChildName.inputAccessoryView = toolBar
+    }
         // textFieldがタップされた際に呼ばれる
         func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
             // 編集中のtextFieldを保持する
@@ -160,22 +171,6 @@ class ChangeChildDataVC: UIViewController, UIAdaptivePresentationControllerDeleg
     
     @objc func imageViewTapped(_ sender: UITapGestureRecognizer) {
                     self.present(imagePicker, animated: true,completion: nil)
-    }
-    
-    
-    
-    
-    @objc func didTapDone() {
-        view.endEditing(true)
-    }
-
-    func configureChildNameTextField() {
-        let toolBarRect = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35)
-        let toolBar = UIToolbar(frame: toolBarRect)
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDone))
-        toolBar.setItems([doneItem], animated: true)
-        changeChildName.inputAccessoryView = toolBar
-
     }
     
 }

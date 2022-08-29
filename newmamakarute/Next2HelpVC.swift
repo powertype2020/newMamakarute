@@ -25,7 +25,7 @@ class Next2HelpVC: UIViewController {
         for touch in touches {
             if touch.view?.tag == 1 {
                 UIView.animate( withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
-                    self.help2View.layer.position.x = -self.help2View.frame.width
+                    self.help2View.layer.position.y = -self.help2View.frame.height
                 }, completion: { bool in self.dismiss(animated: false, completion: nil)
 
                 }

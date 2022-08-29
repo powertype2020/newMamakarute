@@ -81,6 +81,7 @@ protocol EditorViewContorollerDelegate {
          changeDateImage()
          configureHeightTextField()
          configureDateTextField()
+         setImage()
          inputMemoTextView.delegate = self
          inputImage.isUserInteractionEnabled = true
          inputImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageViewTapped(_:))))
@@ -169,6 +170,14 @@ protocol EditorViewContorollerDelegate {
          inputMemoTextView.text = String(record.memo)
          inputDateTextField.text = dateFormatter.string(from: record.date)
          inputImage.image = dateImage
+     }
+     
+     func setImage() {
+         if dateImage == nil {
+             inputImage.image = UIImage(named: "noImage")
+         } else {
+             print("画像あり")
+         }
      }
      
      func changeDateImage() {

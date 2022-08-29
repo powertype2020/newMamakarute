@@ -28,7 +28,6 @@ class StartUpVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         self.perform(#selector(startApp), with: nil, afterDelay: 3.0)
         
     }

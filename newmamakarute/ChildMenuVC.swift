@@ -57,7 +57,7 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
          self.menuView.layer.position.x = -self.menuView.frame.width
          // 表示アニメーション
          UIView.animate(
-             withDuration: 0.1, delay: 0, options: .curveEaseOut, animations: {
+             withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
                  self.menuView.layer.position.x = menuPosition.x
              }, completion: { bool in })
      }
@@ -67,7 +67,7 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
          super.touchesEnded(touches, with: event)
          for touch in touches {
              if touch.view?.tag == 1 {
-                 UIView.animate( withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
+                 UIView.animate( withDuration: 0.1, delay: 0, options: .curveEaseIn, animations: {
                      self.menuView.layer.position.x = -self.menuView.frame.width
                  }, completion: { bool in self.dismiss(animated: false, completion: nil)
 
@@ -108,9 +108,6 @@ class ChildMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         let childs = childList[indexPath.row]
-        if childs.id == mainChildData?.id {
-            cell.isUserInteractionEnabled = false
-        }
         cell.textLabel?.text = childs.name
         return cell
     }

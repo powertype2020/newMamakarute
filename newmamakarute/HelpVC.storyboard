@@ -103,7 +103,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="まずはお子さんの登録から始めましょう！">
                                                 <attributes>
-                                                    <font key="NSFont" size="15" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -118,7 +118,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="このアプリは子供の成長・体調管理を記録を目的としたものです。　　">
                                                 <attributes>
-                                                    <font key="NSFont" size="15" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -185,7 +185,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="このアプリは子供の成長、体調管理などを記録するという目的で作られています。">
                                                 <attributes>
-                                                    <font key="NSFont" size="15" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -200,7 +200,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="いずれこのアプリを通じて、お医者様との共有・お子さまの体調や病気で悩んでいらっしゃる多数の方への共有ができるようになるようにアップデートを続けていきます。">
                                                 <attributes>
-                                                    <font key="NSFont" size="15" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -215,7 +215,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="多くの子供達が心身ともに健康であり、その成長の源であるユーザーの方々へ少しでもお力になれることを切に願っています。">
                                                 <attributes>
-                                                    <font key="NSFont" size="15" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -230,7 +230,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="個人で制作したアプリですので、ご意見・ご要望等々ございましたらApp Storeへレビューをお願いいたします！">
                                                 <attributes>
-                                                    <font key="NSFont" size="12" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="cellTitle"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -306,7 +306,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="画面上にお子さまの名前・アイコンが表示されていることが確認できたら、右下のこのアイコンをタップしましょう！">
                                                 <attributes>
-                                                    <font key="NSFont" size="15" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -321,7 +321,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="既に記録したものはカレンダーに「・」が表示されます、編集や削除をしたい場合はカレンダーの「・」をタップしましょう！">
                                                 <attributes>
-                                                    <font key="NSFont" size="15" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -387,7 +387,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="登録するだけではそのまま使うことができません、カレンダー画面左上のメニューを開きましょう！">
                                                 <attributes>
-                                                    <font key="NSFont" size="16" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="16"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -410,7 +410,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="登録はカレンダー画面の右上にあるこのアイコンをタップしてください！">
                                                 <attributes>
-                                                    <font key="NSFont" size="15" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -499,7 +499,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="アイコンをタップすると、名前が左に表示されます、記録したいお子様の名前をタップしましょう！">
                                                 <attributes>
-                                                    <font key="NSFont" size="15" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -514,7 +514,7 @@
                                         <attributedString key="attributedText">
                                             <fragment content="※お子さまの名前を左にスワイプすると、編集・削除項目が出てきます。">
                                                 <attributes>
-                                                    <font key="NSFont" size="11" name=".HiraKakuInterface-W3"/>
+                                                    <font key="NSFont" metaFont="smallSystem"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>

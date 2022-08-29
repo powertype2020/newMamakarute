@@ -160,9 +160,9 @@ class CalendarVC: UIViewController, UITabBarDelegate {
     
     
     func transitionToSignUpView() {
-    let storyboard = UIStoryboard(name: "SignUpVC", bundle: nil)
-    guard let signUpViewController = storyboard.instantiateInitialViewController() as? SignUpVC else { return }
-    present(signUpViewController, animated: true)
+        let storyboard = UIStoryboard(name: "SignUpVC", bundle: nil)
+        guard let signUpViewController = storyboard.instantiateInitialViewController() as? SignUpVC else { return }
+        present(signUpViewController, animated: true)
     }
     
     func transitionToEditorView(with record: DailyCondition? = nil) {

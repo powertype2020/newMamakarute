@@ -23,7 +23,7 @@ class Next3HelpVC: UIViewController {
         for touch in touches {
             if touch.view?.tag == 1 {
                 UIView.animate( withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
-                    self.help3View.layer.position.x = -self.help3View.frame.width
+                    self.help3View.layer.position.y = -self.help3View.frame.height
                 }, completion: { bool in self.dismiss(animated: false, completion: nil)
 
                 }
